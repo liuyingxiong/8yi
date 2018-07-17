@@ -1,0 +1,263 @@
+<block name="edit">
+    <style>
+        .controls select{
+            width: auto;
+            line-height: 20px;
+            padding: 5px 8px;
+            height: auto;
+        }
+        .controls div{
+            float: left;
+            width: 10%;
+        }
+        .controls div label{
+            float: left;
+            margin: 0;
+            padding: 0;
+            height: 30px;
+            line-height: 30px;
+            width: 30%;
+        }
+        .controls div input{
+            float: left;
+            margin: 0;
+            padding: 0;
+            height: 30px;
+            line-height: 30px;
+            position: relative;
+            top: 1px;
+        }
+        .controls .file-img{
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+        .controls .file-img input{
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            left: 0;
+            opacity: 0;
+        }
+        .controls .file-img div{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <div class="row-fluid sortable ui-sortable">
+        <div class="box span12">
+            <div class="box-header" data-original-title="">
+                <h2><i class="halflings-icon white "></i><span class="break"></span>{$h_span}</h2>
+                <div class="box-icon">
+                    <a href="javascript:void(0)" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+                </div>
+            </div>
+            <div class="box-content">
+                <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label">套餐名称</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="title" type="text" value="{$act_meal.title}"/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">套餐图片</label>
+                            <div class="controls">
+                                <div class="file-img">
+                                    <input type="file" onchange="preview(this)" id="original_img"/>
+                                    <div>
+                                        <notempty name="$act_meal.img">
+                                            <img src="{$act_meal.img}" alt="点击修改图片" style="max-height: 100%;"/>
+                                        <else />
+                                            <img src="__COMMON__/img/onload.png" alt="点击上传图片" style="max-height: 100%;"/>
+                                        </notempty>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="img" readonly="readonly" value=""/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">套餐商品</label>
+                            <div class="controls">
+                                <notempty name="$act_meal">
+                                    <?php
+                                    $imgs = json_decode($act_meal['goods'],true);
+                                    if(!empty($imgs)){
+                                        foreach($imgs as $imgOne){
+                                            echo "<div style='width: 100%; margin-bottom: 10px;'>" .
+                                                        "<input type='text' name='goods_name[]' value='".$imgOne['goods_name']."' placeholder='商品编号' style='float: left; width: 150px; padding: 0 8px;'/>" .
+                                                        "<input type='text' name='goods_number[]' value='".$imgOne['goods_number']."' placeholder='商品数量' style='float: left; width: 150px; padding: 0 8px; margin-left: 10px;'/>" .
+                                                        "<span onclick='$(this).parent().remove()' style='float: left; font-size: 40px; line-height: 24px; height: 32px; width: 30px; cursor: pointer; margin-left: 20px; text-align: center'>-</span>" .
+                                                        "</div>";
+                                            }
+                                        }
+                                    ?>
+                                </notempty>
+                                <a href="javascript:void(0)" class="btn btn-primary" id="addGoods">添加商品</a>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">市场价格</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="market_price" type="text" value="{$act_meal.market_price}" placeholder="3.5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">优惠价格</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="price" type="text" value="{$act_meal.price}" placeholder="3.5" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">开始时间</label>
+                            <div class="controls">
+                                <input class="laydate-icon" id="stime" type="text" name="s_time" data-options="{'type':'YYYY-MM-DD hh:mm:ss','beginYear':2018,'endYear':2088}" <notempty name="$act_meal.s_time">value="{$act_meal.s_time|date='Y-m-d H:i:s',###}"</notempty> placeholder="请点击此处选择开始时间" readonly/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">结束时间</label>
+                            <div class="controls">
+                                <input class="laydate-icon" id="etime" type="text" name="e_time" data-options="{'type':'YYYY-MM-DD hh:mm:ss','beginYear':2018,'endYear':2088}" <notempty name="$act_meal.s_time">value="{$act_meal.e_time|date='Y-m-d H:i:s',###}"</notempty> placeholder="请点击此处选择结束时间" readonly/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">排列顺序</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="sort" type="text" <notempty name="$act_meal">value="{$act_meal.sort}"<else />value="50"</notempty> placeholder="50" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">是否上架</label>
+                            <div class="controls">
+                                <div>
+                                    <label for="yes">是</label>
+                                    <input name="state" id="yes" type="radio" value="1" <notempty name="$act_meal"><if condition="$act_meal.state eq 1">checked="checked"</if><else />checked="checked"</notempty> />
+                                </div>
+                                <div>
+                                    <label for="no">否</label>
+                                    <input name="state" id="no" type="radio" value="0" <notempty name="$act_meal"><if condition="$act_meal.state eq 0">checked="checked"</if></notempty> />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">是否计入排行榜</label>
+                            <div class="controls">
+                                <div>
+                                    <label for="p_yes">是</label>
+                                    <input name="ranking_state" id="p_yes" type="radio" value="1" <notempty name="$act_meal"><if condition="$act_meal.ranking_state eq 1">checked="checked"</if><else />checked="checked"</notempty> />
+                                </div>
+                                <div>
+                                    <label for="p_no">否</label>
+                                    <input name="ranking_state" id="p_no" type="radio" value="0" <notempty name="$act_meal"><if condition="$act_meal.ranking_state eq 0">checked="checked"</if></notempty> />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <notempty name="$act_meal">
+                                <input type="hidden" value="{$act_meal.act_goods_id}" name="act_goods_id" readonly/>
+                            </notempty>
+                            <button type="button" class="btn btn-primary" onclick="addmeal()">{$button}</button>
+                            <button type="button" class="btn btn-primary" onclick="cancel()" style="margin-left: 100px;">取消</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <include file="public:date" />
+    <script>
+        // 开始时间
+        $("#stime").click(function () {
+            on_jeDate("stime","");
+        });
+
+        // 结束时间
+        $("#etime").click(function(){
+            var s_time = $("#stime").val();
+            if(s_time !== "" && $.trim(s_time).length > 0){
+                on_jeDate("etime",s_time);
+            }
+        });
+
+        // 添加商品
+        $("#addGoods").click(function () {
+            var input = "<div style='width: 100%; margin-bottom: 10px;'>" +
+                        "<input type='text' name='goods_name[]' value='' placeholder='商品编号' style='float: left; width: 150px; padding: 0 8px;'/>" +
+                        "<input type='text' name='goods_number[]' value='' placeholder='商品数量' style='float: left; width: 150px; padding: 0 8px; margin-left: 10px;'/>" +
+                        "<span onclick='$(this).parent().remove()' style='float: left; font-size: 40px; line-height: 24px; height: 32px; width: 30px; cursor: pointer; margin-left: 20px; text-align: center'>-</span>" +
+                        "</div>";
+            $(this).before(input);
+        })
+
+
+        // 添加商品
+        function addmeal() {
+            load();
+            $.ajax({
+                type : 'post',
+                url : "{:url('Goods/addmeal')}",
+                data : $(".form-horizontal").serialize(),
+                dataType : 'json',
+                success : function(ret){
+                    layer.closeAll();
+                    if(ret.ret === 1){
+                        layer.msg(ret.msg,{icon:1,time:2000});
+                        setTimeout(function(){
+                            ajaxUrl("Goods/meal_list/p/"+p);
+                        },2000);
+                        //$(".form-horizontal input").val("");
+                    }else{
+                        layer.msg(ret.msg,{icon:2,time:3000});
+                    }
+                }
+            })
+        }
+
+        // 取消
+        function cancel() {
+            $("#goods-edit").html('');
+            $("#goods-edit").css("display","none");
+            $("#goods-list").css('display','block');
+        }
+
+        // 上传图片时显示功能
+        function preview(file){
+            var original_img = $("#original_img");
+            var img = original_img.next("div").find("img");
+            var old_width = img.css("width");
+            var old_height = img.css("height");
+            if(file.files && file.files[0]){
+                var fileImg = file.files[0];
+                if(window.FileReader) {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(fileImg);
+                    reader.onload = function (e) {
+                        base64Code = this.result;
+                        img.attr("src",base64Code);
+                        $("input[name='img']").val(base64Code);
+                        var img_width = img.css("width");
+                        var img_height = img.css("height");
+                        if((img_width*1-old_width*1) > (img_height*1-old_height*1)){
+                            img.css({
+                                "width":"100%",
+                                "height":"auto"
+                            })
+                        }else{
+                            img.css({
+                                "height":"100%",
+                                "width":"auto"
+                            })
+                        }
+                    }
+                }else{
+                    layer.msg('浏览器不支持base64上传功能,请更新为最新的浏览器',{icon:2,time:2000});
+                    original_img.val("");
+                    img.attr("src","__COMMON__/img/onload.png");
+                }
+            }
+        }
+    </script>
+</block>

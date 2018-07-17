@@ -1,0 +1,377 @@
+<block name="edit">
+    <style>
+        .controls select{
+            width: auto;
+            line-height: 20px;
+            padding: 5px 8px;
+            height: auto;
+        }
+        .controls div{
+            float: left;
+            width: 10%;
+        }
+        .controls div label{
+            float: left;
+            margin: 0;
+            padding: 0;
+            height: 30px;
+            line-height: 30px;
+            width: 30%;
+        }
+        .controls div input{
+            float: left;
+            margin: 0;
+            padding: 0;
+            height: 30px;
+            line-height: 30px;
+            position: relative;
+            top: 1px;
+        }
+        .controls .file-img{
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+        .controls .file-img input{
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            left: 0;
+            opacity: 0;
+        }
+        .controls .file-img div{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <div class="row-fluid sortable ui-sortable">
+        <div class="box span12">
+            <div class="box-header" data-original-title="">
+                <h2><i class="halflings-icon white "></i><span class="break"></span>{$h_span}</h2>
+                <div class="box-icon">
+                    <a href="javascript:void(0)" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+                </div>
+            </div>
+            <div class="box-content">
+                <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label">期数</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="stage" type="text" value="<?php echo isset($prize_row) ? $prize_row['stage'] : false ; ?>" placeholder="1" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">省钱第一名得主</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" type="text" value="<?php echo isset($prize_row) ? $prize_row['one_people'] : false ; ?>" readonly/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">省钱第一名奖品图片</label>
+                            <div class="controls">
+                                <div class="file-img">
+                                    <input type="file" onchange="preview(this,'original_one')" id="original_one"/>
+                                    <div>
+                                        <notempty name="$prize_row">
+                                            <img src="{$prize_row.one_img}" alt="点击修改图片" style="max-height: 100%;"/>
+                                        <else />
+                                            <img src="__COMMON__/img/onload.png" alt="点击上传图片" style="max-height: 100%;"/>
+                                        </notempty>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="one_img" readonly="readonly" value=""/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">省钱第一名奖品描述</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="one_des" type="text" value="<?php echo isset($prize_row) ? $prize_row['one_des'] : false ; ?>" placeholder="怡宝矿泉水一箱" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">省钱第二名得主</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" type="text" value="<?php echo isset($prize_row) ? $prize_row['two_people'] : false ; ?>" readonly/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">省钱第二名奖品图片</label>
+                            <div class="controls">
+                                <div class="file-img">
+                                    <input type="file" onchange="preview(this,'original_two')" id="original_two"/>
+                                    <div>
+                                        <notempty name="$prize_row">
+                                            <img src="{$prize_row.two_img}" alt="点击修改图片" style="max-height: 100%;"/>
+                                        <else />
+                                            <img src="__COMMON__/img/onload.png" alt="点击上传图片" style="max-height: 100%;"/>
+                                        </notempty>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="two_img" readonly="readonly" value=""/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">省钱第二名奖品描述</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="two_des" type="text" value="<?php echo isset($prize_row) ? $prize_row['two_des'] : false ; ?>" placeholder="怡宝矿泉水一箱" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">省钱第三名得主</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" type="text" value="<?php echo isset($prize_row) ? $prize_row['three_people'] : false ; ?>" readonly/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">省钱第三名奖品图片</label>
+                            <div class="controls">
+                                <div class="file-img">
+                                    <input type="file" onchange="preview(this,'original_three')" id="original_three"/>
+                                    <div>
+                                        <notempty name="$prize_row">
+                                            <img src="{$prize_row.three_img}" alt="点击修改图片" style="max-height: 100%;"/>
+                                            <else />
+                                            <img src="__COMMON__/img/onload.png" alt="点击上传图片" style="max-height: 100%;"/>
+                                        </notempty>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="three_img" readonly="readonly" value=""/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">省钱第三名奖品描述</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="three_des" type="text" value="<?php echo isset($prize_row) ? $prize_row['three_des'] : false ; ?>" placeholder="怡宝矿泉水一箱" />
+                            </div>
+                        </div>
+                        <div style="height: 10px; background: #e0e0e0; margin-bottom: 20px;"></div>
+                        <div class="control-group">
+                            <label class="control-label">心愿第一名得主</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" type="text" value="<?php echo isset($prize_row) ? $prize_row['x_one_people'] : false ; ?>" readonly/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">心愿第一名奖品图片</label>
+                            <div class="controls">
+                                <div class="file-img">
+                                    <input type="file" onchange="preview(this,'x_original_one')" id="x_original_one"/>
+                                    <div>
+                                        <notempty name="$prize_row">
+                                            <img src="{$prize_row.x_one_img}" alt="点击修改图片" style="max-height: 100%;"/>
+                                            <else />
+                                            <img src="__COMMON__/img/onload.png" alt="点击上传图片" style="max-height: 100%;"/>
+                                        </notempty>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="x_one_img" readonly="readonly" value=""/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">心愿第一名奖品描述</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="x_one_des" type="text" value="<?php echo isset($prize_row) ? $prize_row['x_one_des'] : false ; ?>" placeholder="心愿-怡宝矿泉水一箱" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">心愿第二名得主</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" type="text" value="<?php echo isset($prize_row) ? $prize_row['x_two_people'] : false ; ?>" readonly/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">心愿第二名奖品图片</label>
+                            <div class="controls">
+                                <div class="file-img">
+                                    <input type="file" onchange="preview(this,'x_original_two')" id="x_original_two"/>
+                                    <div>
+                                        <notempty name="$prize_row">
+                                            <img src="{$prize_row.x_two_img}" alt="点击修改图片" style="max-height: 100%;"/>
+                                            <else />
+                                            <img src="__COMMON__/img/onload.png" alt="点击上传图片" style="max-height: 100%;"/>
+                                        </notempty>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="x_two_img" readonly="readonly" value=""/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">心愿第二名奖品描述</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="x_two_des" type="text" value="<?php echo isset($prize_row) ? $prize_row['x_two_des'] : false ; ?>" placeholder="心愿-怡宝矿泉水一箱" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">心愿第三名得主</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" type="text" value="<?php echo isset($prize_row) ? $prize_row['x_three_people'] : false ; ?>" readonly/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">心愿第三名奖品图片</label>
+                            <div class="controls">
+                                <div class="file-img">
+                                    <input type="file" onchange="preview(this,'x_original_three')" id="x_original_three"/>
+                                    <div>
+                                        <notempty name="$prize_row">
+                                            <img src="{$prize_row.x_three_img}" alt="点击修改图片" style="max-height: 100%;"/>
+                                            <else />
+                                            <img src="__COMMON__/img/onload.png" alt="点击上传图片" style="max-height: 100%;"/>
+                                        </notempty>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="x_three_img" readonly="readonly" value=""/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">心愿第三名奖品描述</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="x_three_des" type="text" value="<?php echo isset($prize_row) ? $prize_row['x_three_des'] : false ; ?>" placeholder="心愿-怡宝矿泉水一箱" />
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">开始时间</label>
+                            <div class="controls">
+                                <input class="laydate-icon" id="stime" type="text" name="s_time" data-options="{'type':'YYYY-MM-DD hh:mm:ss','beginYear':2018,'endYear':2088}" <notempty name="$prize_row.s_time">value="{$prize_row.s_time|date='Y-m-d H:i:s',###}"</notempty> placeholder="请点击此处选择开始时间" readonly/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">结束时间</label>
+                            <div class="controls">
+                                <input class="laydate-icon" id="etime" type="text" name="e_time" data-options="{'type':'YYYY-MM-DD hh:mm:ss','beginYear':2018,'endYear':2088}" <notempty name="$prize_row.s_time">value="{$prize_row.e_time|date='Y-m-d H:i:s',###}"</notempty> placeholder="请点击此处选择结束时间" readonly/>
+                            </div>
+                        </div>
+                        <notempty name="$prize_row">
+                            <div class="control-group">
+                                <label class="control-label">奖励状态</label>
+                                <div class="controls">
+                                    <!--<input class="input-xlarge focused" type="text"
+                                        <switch name="$prize_row.state">
+                                            <case value="1">value="活动进行中"</case>
+                                            <case value="2">value="活动发放中"</case>
+                                            <case value="3">value="活动完成"</case>
+                                            <default />value="活动准备中"
+                                        </switch>
+                                     readonly/>-->
+                                    <if condition="$prize_row.state eq 0">
+                                        <select name="state" style="outline: none; width: 270px;">
+                                            <option value="0" selected="selected">活动准备中</option>
+                                            <option value="1">活动进行中</option>
+                                            <option value="2">活动发放中</option>
+                                            <option value="3">活动完成</option>
+                                        </select>
+                                    <else />
+                                        <input class="input-xlarge focused" type="text"
+                                        <switch name="$prize_row.state">
+                                            <case value="1">value="活动进行中"</case>
+                                            <case value="2">value="活动发放中"</case>
+                                            <case value="3">value="活动完成"</case>
+                                            <default />value="活动准备中"
+                                        </switch>
+                                        readonly/>
+                                    </if>
+                                </div>
+                            </div>
+                        </notempty>
+                        <div class="form-actions">
+                            <notempty name="$prize_row">
+                                <input type="hidden" value="{$prize_row.id}" name="id" readonly/>
+                                <if condition="$prize_row.state eq 0">
+                                    <button type="button" class="btn btn-primary" onclick="addmeal()">{$button}</button>
+                                </if>
+                            <else />
+                                <button type="button" class="btn btn-primary" onclick="addmeal()">{$button}</button>
+                            </notempty>
+                            <button type="button" class="btn btn-primary" onclick="cancel()" style="margin-left: 100px;">取消</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <include file="public:date" />
+    <script>
+        // 开始时间
+        $("#stime").click(function () {
+            on_jeDate("stime","");
+        });
+
+        // 结束时间
+        $("#etime").click(function(){
+            var s_time = $("#stime").val();
+            if(s_time !== "" && $.trim(s_time).length > 0){
+                on_jeDate("etime",s_time);
+            }
+        });
+
+        // 添加奖励
+        function addmeal() {
+            load();
+            $.ajax({
+                type : 'post',
+                url : "{:url('Prize/add_prize')}",
+                data : $(".form-horizontal").serialize(),
+                dataType : 'json',
+                success : function(ret){
+                    layer.closeAll();
+                    if(ret.ret === 1){
+                        layer.msg(ret.msg,{icon:1,time:1000});
+                        setTimeout(function(){
+                            ajaxUrl("Prize/reward_list/p/"+p);
+                        },1000);
+                    }else{
+                        layer.msg(ret.msg,{icon:2,time:3000});
+                    }
+                }
+            })
+        }
+
+        // 取消
+        function cancel() {
+            $("#order-edit").html('');
+            $("#order-edit").css("display","none");
+            $("#order-list").css('display','block');
+        }
+
+        // 上传图片时显示功能
+        function preview(file,imgID){
+            var original_img = $("#"+imgID);
+            var img = original_img.next("div").find("img");
+            var old_width = img.css("width");
+            var old_height = img.css("height");
+            if(file.files && file.files[0]){
+                var fileImg = file.files[0];
+                if(window.FileReader) {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(fileImg);
+                    reader.onload = function (e) {
+                        base64Code = this.result;
+                        img.attr("src",base64Code);
+                        original_img.parent().next("input").val(base64Code);
+                        var img_width = img.css("width");
+                        var img_height = img.css("height");
+                        if((img_width*1-old_width*1) > (img_height*1-old_height*1)){
+                            img.css({
+                                "width":"100%",
+                                "height":"auto"
+                            })
+                        }else{
+                            img.css({
+                                "height":"100%",
+                                "width":"auto"
+                            })
+                        }
+                    }
+                }else{
+                    layer.msg('浏览器不支持base64上传功能,请更新为最新的浏览器',{icon:2,time:2000});
+                    original_img.val("");
+                    img.attr("src","__COMMON__/img/onload.png");
+                }
+            }
+        }
+    </script>
+</block>

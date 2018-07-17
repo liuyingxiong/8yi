@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>邻居联盟</title>
+    <meta name="viewport"   content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/css/swiper.min.css">
+    <link rel="stylesheet" href="__MOBILE__/css/reset.css">
+    <link rel="stylesheet" href="__MOBILE__/css/prize3.css">
+</head>
+<body>
+<img src="__MOBILE__/img/bqhd_bg.png" alt="" id="bgbg">
+<div class="prize3_cont">
+    <div class="prize3_btn">
+        <a class="prize3_a" href="Javascript:history.back()"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+    </div>
+    <div class="prize3_t">
+        <img src="__MOBILE__/img/wqhd_t.png" alt="" class="bg_t">
+    </div>
+    <div class="prize3_time"><notempty name="$prize">{$prize.stage}期<else/>&nbsp;</notempty></div>
+    <div class="prize_list">
+        <div class="prize_l">
+            <div class="prize_list_btn">
+                <a class="prize_list_btn_active prize_list_btn_a" href="javascript:;" data-id="paihang"><p>邻里排行</p></a>
+                <a class="prize_list_btn_a" href="javascript:;" data-id="xinyuan"><p>邻里心愿</p></a>
+            </div>
+        </div>
+        <div class="prize_r">
+            <div class="prize_list_tit"><span class="tit_name">邻居昵称</span><span class="tit_jp">奖品</span></div>
+            <div class="prize_list_cont">
+                <ul class="prize_list_ul" id="paihang">
+                    <li>
+                        <div class="lev lev1"><img src="__MOBILE__/img/lev1.png" alt=""></div>
+                        <div class="lev_name">{$prize.one_people}</div>
+                        <div class="jp_desc">
+                            <div class="jp_name">{$prize.one_des}</div>
+                            <div class="user_logo">
+                                <img src="{$prize.one_img}" alt="">
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="lev"><img src="__MOBILE__/img/lev2.png" alt=""></div>
+                        <div class="lev_name">{$prize.two_people}</div>
+                        <div class="jp_desc">
+                            <div class="jp_name">{$prize.two_des}</div>
+                            <div class="user_logo">
+                                <img src="{$prize.two_img}" alt="">
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="lev"><img src="__MOBILE__/img/lev3.png" alt=""></div>
+                        <div class="lev_name">{$prize.three_people}</div>
+                        <div class="jp_desc">
+                            <div class="jp_name">{$prize.three_des}</div>
+                            <div class="user_logo">
+                                <img src="{$prize.three_img}" alt="">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="prize_list_ul" id="xinyuan" style="display: none">
+                    <li>
+                        <div class="lev lev1"><img src="__MOBILE__/img/lev1.png" alt=""></div>
+                        <div class="lev_name">{$prize.x_one_people}</div>
+                        <div class="jp_desc">
+                            <div class="jp_name">{$prize.x_one_des}</div>
+                            <div class="user_logo">
+                                <img src="{$prize.x_one_img}" alt="">
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="lev"><img src="__MOBILE__/img/lev2.png" alt=""></div>
+                        <div class="lev_name">{$prize.x_two_people}</div>
+                        <div class="jp_desc">
+                            <div class="jp_name">{$prize.x_two_des}</div>
+                            <div class="user_logo">
+                                <img src="{$prize.x_two_img}" alt="">
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="lev"><img src="__MOBILE__/img/lev3.png" alt=""></div>
+                        <div class="lev_name">{$prize.x_three_people}</div>
+                        <div class="jp_desc">
+                            <div class="jp_name">{$prize.x_three_des}</div>
+                            <div class="user_logo">
+                                <img src="{$prize.x_three_img}" alt="">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="prize_list_bottom">
+                <div class="prize_list_bottom_l">
+                    <img src="__MOBILE__/img/fonts-ico.png" alt="">
+                </div>
+                <ul class="prize_list_bottom_r">
+                    <li>
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+                                <!--<div class="swiper-slide">
+                                    <p class="p1">用户用户用户用户用户用户用户<br/>获得了别墅一栋</p><p>在<span class="times">201807</span>期中</p>
+                                </div>
+                                <div class="swiper-slide">
+                                    <p class="p1">用户2<br/>获得了别墅一栋</p><p>在<span class="times">201807</span>期中</p>
+                                </div>
+                                <div class="swiper-slide">
+                                    <p class="p1">用户3<br/>获得了别墅一栋</p><p>在<span class="times">201807</span>期中</p>
+                                </div>-->
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="prize3_footer">
+        <img src="__MOBILE__/img/bqhd_footer.png" alt="">
+    </div>
+</div>
+<script src="__MOBILE__/js/rem.js"></script>
+<script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/js/swiper.min.js"></script>
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        direction: 'vertical',
+        height: 70,
+        autoplay: {
+            delay: 1000,
+            stopOnLastSlide: false,
+            disableOnInteraction: true,
+        }
+    });
+    var obtn = document.getElementsByClassName('prize_list_btn_a');
+    for(var i=0;i<obtn.length;i++){
+        obtn[i].index = i;
+        obtn[i].onclick = function () {
+            for(var k = 0;k<obtn.length;k++){
+                obtn[k].classList.remove('prize_list_btn_active');
+            }
+            obtn[this.index].classList.add('prize_list_btn_active');
+        }
+    };
+    $(".prize_body").height($(".prize_body").height());
+
+    // 点击显示
+    $(".prize_list_btn a").click(function () {
+        var id = $(this).data("id");
+        $(".prize_list_ul").css('display',"none");
+        $("#"+id).show();
+    })
+</script>
+</body>
+</html>

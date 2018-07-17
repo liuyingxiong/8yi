@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <include file="public:head" title="邻居联盟"/>
+    <style>
+        .add_dz_btn{
+            width: 100%;
+            text-align: center;
+            margin: 0.2rem 0;
+        }
+        .add_dz_btn input{
+            width: 60%;
+            background: #fff;
+            border:1px solid #9c9c9c;
+            height: 0.7rem;
+            border-radius: 10px;
+            outline: none;
+        }
+        .shop_car_footer{
+            border-top: 1px solid #e5e5e5;
+            position: fixed;
+            bottom: 0;
+            z-index: 999;
+        }
+        .shop_car_cont{
+            margin-bottom: 2.2rem;
+        }
+    </style>
+</head>
+<body id="opt_address_body">
+<div class="top_style">
+    <!--<a href="{:url('Goods/index')} "class="left"><img src="__MOBILE__/svg/left.svg" alt=""></a>-->
+    <a href="javascript:void(0)" class="left"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+    <span class="center">确认订单</span>
+</div>
+
+<!-- 收货地址 -->
+<div class="weui-cells shop_address">
+    <notempty name="site">
+        <a class="weui-cell weui-cell_access" href="{:url('Site/list',['title'=>'选择地址','site_id'=>$site['id']])}">
+            <div class="weui-cell__bd">
+                <p>{$site.province}{$site.city}{$site.county}{$site.street}{$site.community}{$site.tower}{$site.unit}{$site.floor}</p>
+                <p><span style="margin-right: 0.5rem;">{$site.receiver}</span><span>{$site.phone}</span></p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <else />
+        <a href="{:url('Site/list')}" class="address">
+            <div class="add_dz_btn">
+                <input type="button" value="+ 添加地址">
+            </div>
+        </a>
+    </notempty>
+</div>
+
+<div class="shop_car_cont">
+    <div class="weui-cells weui-cells_checkbox">
+        <ul>
+            <foreach name="$goods" item="list" key="k">
+            <li class="shop_car_item">
+                <label class="weui-cell weui-check__label" for="s{$k}">
+                    <switch name="$list.is_on_sale">
+                        <case value="1">
+                            <div class="weui-cell__hd">
+                                <input type="checkbox" class="weui-check" name="checkbox1" id="s{$k}" checked="checked" value="{$list.goods_sn}">
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd shop_car_list">
+                                <div class="goods_pic"><img src="{$list.thumbnail_img}" alt=""></div>
+                                <div class="goods_info">
+                                    <p class="goods_tit">{$list.goods_name}</p>
+                                    <ul class="goods_other">
+                                        <!--<li>华润超市<span class="comp_price">{$list.market_price}</span>元</li>-->
+                                        <li>市场价格：<span <if condition="$list.tiptop eq 0">class="comp_price"</if> >{$list.market_price}</span>元</li>
+                                        <li>淘宝价格：<span <if condition="$list.tiptop eq 1">class="comp_price"</if> >{$list.taobao_price}</span>元</li>
+                                        <li>华润超市价格：<span <if condition="$list.tiptop eq 2">class="comp_price"</if> >{$list.huarun_price}</span>元</li>
+                                    </ul>
+                                    <p class="price_dj">
+                                        <span class="price">¥{$list.shop_price}</span>
+                                        <span class="price_btn">
+                                            <a class="jian_goods_btn goods_shop_list_btn" href="javascript:;"><img src="__MOBILE__/svg/jian.svg" width="25px" alt=""></a>
+                                            <a href="javascript:;" class="shop_num">{$list.number}</a>
+                                            <a class="jia_goods_btn goods_shop_list_btn" href="javascript:;"><img src="__MOBILE__/svg/jia.svg" width="30px" alt=""></a>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </case>
+                        <default />
+                            <div class="weui-cell__hd">
+                                <input type="checkbox" class="weui-check" name="checkbox1" id="" value="" />
+                                <i class="weui-icon-checked"></i>
+                            </div>
+                            <div class="weui-cell__bd shop_car_list">
+                                <ul>
+                                    <li>
+                                        <div class="goods_pic"><img src="{$list.thumbnail_img}" alt=""></div>
+                                        <div class="goods_info">
+                                            <p class="goods_tit">{$list.goods_name}</p>
+                                            <ul class="goods_other">
+                                                <li>市场价格：<span <if condition="$list.tiptop eq 0">class="comp_price"</if> >{$list.market_price}</span>元</li>
+                                                <li>淘宝价格：<span <if condition="$list.tiptop eq 1">class="comp_price"</if> >{$list.taobao_price}</span>元</li>
+                                                <li>华润超市价格：<span <if condition="$list.tiptop eq 2">class="comp_price"</if> >{$list.huarun_price}</span>元</li>
+                                                <li>商品已经下架不能选购这个商品</li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                    </switch>
+                </label>
+            </li>
+            </foreach>
+        </ul>
+    </div>
+    <div class="shop_car_footer">
+        <div class="shop_bot_l">
+            <p class="shop_num_all">共<span id="tot_num">0</span>份
+                <!--<span>免运费</span>-->
+            </p>
+            <p>商品合计：<span class="shop_tot" id="tot_all">0</span>（已省¥<span id="ys">0</span>）</p>
+        </div>
+        <div class="shop_bot_r">
+            <a href="javascript:;">确认下单</a>
+        </div>
+    </div>
+</div>
+<include file="public:layer" />
+<script>
+    // 返回商品列表页面
+    $(".left").click(function () {
+        var form = $("<form></form>");
+        form.attr('action',"");
+        form.attr('method','post');
+        var list = document.getElementsByClassName('shop_car_item');
+        $.each(list,function (i,v) {
+            var input = v.getElementsByClassName("weui-check")[0];
+            if(input.checked){
+                var input1 = "<input type='hidden' readonly='readonly' name='" + input.value + "' value='" + v.getElementsByClassName("shop_num")[0].innerHTML + "'/>";
+                form.append(input1);
+            }
+        })
+        $.ajax({
+            url:"{:url('Order/ajaxRecord')}",
+            type: "post",
+            data: form.serialize(),
+            dataType:'json',
+            success:function (e) {
+                if(e.ret === 1){
+                    window.location.href="{:url('Goods/index')}";
+                }else{
+                    layer.msg(e.msg(),{icon:2,time:3000});
+                }
+            },
+            error:function(er){
+                layer.msg(er,{icon:2,time:3000});
+            }
+        });
+    })
+
+    // 购买商品
+    $(".shop_bot_r a").click(function () {
+        var site_id = "{$site.id}";
+        var order_sn = "{$order_sn}";
+        if(site_id === "" || site_id === null || typeof(site_id) === "undefined"){
+            layer.msg("请添加收货地址",{icon:2,time:3000});
+            return false;
+        }
+        if($("input:checkbox[name='checkbox1']:checked").length <= 0){
+            layer.msg("请选择要购买的商品",{icon:2,time:3000});
+            return false;
+        }
+
+        var form = $("<form></form>");
+        form.attr('action',"{:url('Order/pay')}");
+        form.attr('method','post');
+        form.append("<input type='hidden' readonly='readonly' name='site_id' value='" + site_id + "'/>");  // 收货ID
+        form.append("<input type='hidden' readonly='readonly' name='order_sn' value='" + order_sn + "'/>");  // 订单编号
+        var list = document.getElementsByClassName('shop_car_item');
+        $.each(list,function (i,v) {
+            var input = v.getElementsByClassName("weui-check")[0];
+            if(input.checked){
+                var input1 = "<input type='hidden' readonly='readonly' name='" + input.value + "' value='" + v.getElementsByClassName("shop_num")[0].innerHTML + "'/>";  // 商品编码以及商品数量
+                form.append(input1);
+            }
+        });
+        form.appendTo("body");
+        form.css('display','none');
+        load();
+        $.ajax({
+            type : 'post',
+            url : "{:url('Order/xiaorder')}",
+            data : form.serialize(),
+            dataType : 'json',
+            success : function(ret){
+                layer.closeAll();
+                if(ret.ret == 1){
+                    var url = "{:url('Order/pays')}";
+                        url = url.replace(".html","");
+                    window.location.href=url+'/order_sn/'+ret.msg['order_sn'];
+                }else{
+                    layer.alert(ret.msg, {icon: 2,time:2000});
+                }
+            }
+        })
+        /*layer.confirm('确认要购买吗？', {
+            btn : [ '确定', '取消' ]//按钮
+        }, function() {
+            layer.closeAll();
+            layer.load(1,{shade: [0.7, '#393D49']}, {shadeClose: true});
+            var form = $("<form></form>");
+            form.attr('action',"{:url('Order/pay')}");
+            form.attr('method','post');
+            form.append("<input type='hidden' readonly='readonly' name='site_id' value='" + site_id + "'/>");  // 收货ID
+            form.append("<input type='hidden' readonly='readonly' name='order_sn' value='" + order_sn + "'/>");  // 订单编号
+            var list = document.getElementsByClassName('shop_car_item');
+            $.each(list,function (i,v) {
+                var input = v.getElementsByClassName("weui-check")[0];
+                if(input.checked){
+                    var input1 = "<input type='hidden' readonly='readonly' name='" + input.value + "' value='" + v.getElementsByClassName("shop_num")[0].innerHTML + "'/>";  // 商品编码以及商品数量
+                    form.append(input1);
+                }
+            });
+            form.appendTo("body");
+            form.css('display','none');
+            form.submit();
+        });*/
+    });
+
+    //复选框
+    var input  = document.getElementsByClassName('weui-check');
+    //所有li
+    var oli = document.getElementsByClassName('shop_car_item');
+    //减按钮
+    var oj = document.getElementsByClassName('jian_goods_btn');
+    //加按钮
+    var oa = document.getElementsByClassName('jia_goods_btn');
+    //商品数量
+    var on = document.getElementsByClassName('shop_num');
+    //总价
+    var otot_all = document.getElementById('tot_all');
+    //总数
+    var otot_num = document.getElementById('tot_num');
+    //比价列表
+    // var comp_price = document.getElementsByClassName('comp_price');
+    var oys = document.getElementById('ys');
+    var tot = null;
+    var unit_price = null;
+    var tot_num = null;
+    var nums = null;
+    var arr = [];
+    var tot_list = null;
+    var comp_total = null;
+    otot_all.innerHTML = total().tot.toFixed(2);
+    otot_num.innerHTML = total().tot_num;
+    oys.innerHTML = total().comp_total.toFixed(2);
+    //复选框
+    for(var i = 0;i<input.length;i++){
+        input[i].index = i;
+        input[i].onclick = function () {
+            tot_list = total();
+            otot_all.innerHTML = tot_list.tot.toFixed(2);
+            otot_num.innerHTML = tot_list.tot_num;
+            oys.innerHTML = tot_list.comp_total.toFixed(2);
+        }
+
+    }
+    //计算总价和数量
+    function total() {
+        arr = [];
+        tot = null;
+        tot_num = null;
+        comp_total = null;
+        for (var k = 0; k < oli.length; k++) {
+            if (oli[k].getElementsByClassName('weui-check')[0].checked) {
+                arr.push(oli[k]);
+            }
+        }
+        if (arr.length == 0) {
+            tot = 0;
+            tot_num = 0;
+            comp_total = 0;
+        } else {
+        for (var i = 0; i < arr.length; i++) {
+            unit_price = arr[i].getElementsByClassName('price')[0].innerHTML.split('¥')[1];
+            nums = arr[i].getElementsByClassName('shop_num')[0].innerHTML;
+            tot += parseFloat(unit_price) * parseInt(nums);
+            tot_num += parseInt(nums);
+            comp_total += (parseFloat(arr[i].getElementsByClassName('comp_price')[0].innerHTML) - parseFloat(unit_price)) * parseInt(nums);
+        }
+
+    }
+        return {
+            tot: tot,
+            tot_num: tot_num,
+            comp_total: comp_total
+        };
+    }
+    //点击减事件
+    for(var j = 0;j<oj.length;j++){
+        oj[j].index = j;
+        oj[j].onclick = function () {
+            if(parseInt(on[this.index].innerHTML)<=1){
+                on[this.index].innerHTML = 1;
+            }else{
+                on[this.index].innerHTML = parseInt(on[this.index].innerHTML)-1;
+            }
+            tot_list = total();
+            otot_all.innerHTML = tot_list.tot.toFixed(2);
+            otot_num.innerHTML = tot_list.tot_num;
+            oys.innerHTML = tot_list.comp_total.toFixed(2);
+            tot = null;
+            tot_num = null;
+        };
+    };
+    //点击加事件
+    for(var i = 0;i<oa.length;i++){
+        oa[i].index = i;
+        oa[i].onclick = function () {
+            on[this.index].innerHTML = parseInt(on[this.index].innerHTML)+1;
+            tot_list = total();
+            otot_all.innerHTML = tot_list.tot.toFixed(2);
+            otot_num.innerHTML = tot_list.tot_num;
+            oys.innerHTML = tot_list.comp_total.toFixed(2);
+            tot = null;
+            tot_num = null;
+            comp_total = null;
+        };
+    };
+</script>
+</body>
+</html>

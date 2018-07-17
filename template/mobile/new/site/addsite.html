@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <include file="public:head" title="邻居联盟"/>
+    <style>
+        .weui-cell__hd span{
+            color: red;
+            position: relative;
+            top: 3px;
+            width: 10px;
+            display: inline-block;
+        }
+        .mo{
+            background: #d05f80;
+            position: absolute;
+            border: 0;
+            color: #fff;
+            right: 0.2rem;
+            top: 0.2rem;
+            font-size: 100%;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body id="add_address_body">
+<div class="top_style">
+    <a href="Javascript:history.back()" class="left"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+    <span class="center">{$title}</span>
+    <notempty name="site">
+        <button type="button" class="mo">删除</button>
+
+    </notempty>
+</div>
+<form action="">
+    <div class="weui-cells weui-cells_form add_address">
+        <div class="add_address_list-item">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">联系人</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="receiver" placeholder="您的姓名" <notempty name="site">value="{$site.receiver}"</notempty>>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">电话</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" pattern="[0-9]*" name="phone" maxlength="11" placeholder="您的手机号" <notempty name="site">value="{$site.phone}"</notempty>>
+                </div>
+            </div>
+        </div>
+        <div class="add_address_list-item">
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">所在省</label></div>
+                <div class="weui-cell__bd">
+                    <select name="province" class="weui-input">
+                        <foreach $province as $list>
+                            <if condition="$list.area_name eq '重庆'">
+                                <option value="{$list.area_id}" <notempty name="zone"><if condition="$zone[0] eq $list.area_id">selected="selected"</if></notempty> >{$list.area_name}</option>
+                            </if>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">所在市</label></div>
+                <div class="weui-cell__bd">
+                    <select name="city" class="weui-input">
+                        <foreach $city as $list>
+                            <option value="{$list.area_id}" <notempty name="zone"><if condition="$zone[1] eq $list.area_id">selected="selected"</if></notempty> >{$list.area_name}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">所在区</label></div>
+                <div class="weui-cell__bd">
+                    <select name="county" class="weui-input">
+                        <foreach $county as $list>
+                            <if condition="$list.area_name eq '江北区'">
+                                <option value="{$list.area_id}" <notempty name="zone"><if condition="$zone[2] eq $list.area_id">selected="selected"</if></notempty> >{$list.area_name}</option>
+                            </if>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">街道</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="street" placeholder="例:五里店街道" <notempty name="site">value="{$site.street}"</notempty>>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">小区</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="community" placeholder="例:珠江国际B区" <notempty name="site">value="{$site.community}"</notempty>>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">楼层房号</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="tower" placeholder="例:10栋15-6" <notempty name="site">value="{$site.tower}"</notempty>>
+                </div>
+            </div>
+            <!--<div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label"><span></span>所在单元</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="unit" placeholder="例:1单元 或者 不填" <notempty name="site">value="{$site.unit}"</notempty>>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">楼层房号</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" name="floor" placeholder="例:0501 或者 1213" <notempty name="site">value="{$site.floor}"</notempty>>
+                </div>
+            </div>-->
+        </div>
+        <div class="weui-btn-area">
+            <input type="hidden" name="site_id" <notempty name="site">value="{$site.id}"</notempty> />
+            <a class="weui-btn" href="javascript:" id="showTooltips" <notempty name="site">data-url="{:url('Site/ajaxmodify')}"<else />data-url="{:url('Site/ajaxadd')}"</notempty>>确定</a>
+        </div>
+    </div>
+</form>
+</body>
+<include file="public:layer" />
+<script type="text/javascript" src="__COMMON__/js/style.js"></script>
+<script>
+    $(function () {
+        // 添加地址
+        $("#showTooltips").click(function () {
+            var receiver = $("input[name='receiver']").val(),
+                phone = $("input[name='phone']").val(),
+                street = $("input[name='street']").val(),
+                community = $("input[name='community']").val(),
+                tower = $("input[name='tower']").val(),
+               /* unit = $("input[name='unit']").val(),
+                floor = $("input[name='floor']").val(),*/
+                province = $("select[name='province']").val(),
+                city = $("select[name='city']").val(),
+                county = $("select[name='county']").val();
+            if($.trim(receiver) == ""){
+                msgErr("请填写收货人姓名",2,2000);
+                return false;
+            }
+            if(checkMobile(phone) == false){
+                msgErr("请填写正确的收货人电话",2,2000);
+                return false;
+            }
+            if($.trim(street) == ""){
+                msgErr("请填写街道名称",2,2000);
+                return false;
+            }
+            if($.trim(community) == ""){
+                msgErr("请填写小区名称",2,2000);
+                return false;
+            }
+            if($.trim(tower) == ""){
+                msgErr("请填写楼层房号",2,2000);
+                return false;
+            }
+            /*if($.trim(floor) == ""){
+                msgErr("请填写房号",2,2000);
+                return false;
+            }*/
+            var url = $(this).data("url"),
+                id = $("input[name='site_id']").val();
+            var _this = $(this);
+            _this.css("display","none");
+            $.ajax({
+                type : 'post',
+                url : url,
+                data : {
+                    province:province,
+                    city:city,
+                    county:county,
+                    receiver:receiver,
+                    phone:phone,
+                    street:street,
+                    community:community,
+                    tower:tower,
+                    /*unit:$.trim(unit),
+                    floor:floor,*/
+                    id:id
+                },
+                dataType : 'json',
+                success : function(ret){
+                    console.log(ret);
+                    if(ret.ret == 1){
+                        window.history.go(-1);
+//                        window.location.href=document.referrer;
+                    }else{
+                        _this.css("display","");
+                        msgErr(ret.msg,2,3000);
+                    }
+                }
+            })
+        })
+
+        // 删除地址
+        $(".mo").click(function () {
+            var id = $("input[name='site_id']").val();
+            layer.confirm('确认要删除吗，删除后不能恢复？', {
+                btn: ['确认','取消'] //按钮
+            }, function(){
+                layer.closeAll();
+                layer.load(1, {shade: false});
+                $.ajax({
+                    type : 'post',
+                    url : "{:url('Site/ajaxdel')}",
+                    data : {
+                        id:id
+                    },
+                    dataType : 'json',
+                    success : function(ret){
+                        layer.closeAll();
+                        console.log(ret);
+                        if(ret.ret == 1){
+                            window.history.go(-1);
+//                            window.location.href=document.referrer;
+                        }else{
+                            msgErr(ret.msg,2,3000);
+                        }
+                    }
+                })
+            });
+        })
+    })
+</script>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <include file="public:head" title="邻居联盟"/>
+    <style>
+        /* ::-webkit-scrollbar{width:5px;}
+        ::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,0.5);}
+        ::-webkit-scrollbar-thumb:hover {background-color:#9c3}
+        ::-webkit-scrollbar-thumb:active {background-color:#00aff0} */
+        #zz{
+            display: none;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            position: fixed;
+            top: 0;
+            z-index: 99998;
+        }
+        /* .goods_list_right{
+            width: 66%;
+        } */
+        .z_subtotal{
+            flex: 1;
+            text-align: right;
+            margin-right: 0.1rem;
+        }
+        .goods_bot_l p{
+            display: inline-block;
+        }
+        .top_style .tucao_nav_r{
+            display: inline-block;
+            width: 0.4rem;
+            height: 0.4rem;
+            line-height: 0.4rem;
+            position: absolute;
+        }
+        .top_style>a img{
+            width: 100%;
+            height: 100%;
+        }
+        .top_style .tucao_nav_r{
+            padding-left:0.5rem;
+            right: 0.1rem;
+            top: 0;
+            width: 0.8rem;
+            height: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .top_style .tucao_nav_r img{
+            width: 50%;
+            height: 50%;
+        }
+        .tocao_menu{
+            display: none;
+            background: #fff;
+            position: absolute;
+            top: 0.8rem;
+            right: 0;
+            /*border: 1px solid #9c9c9c;*/
+            /*border-top: none;*/
+            box-shadow: -1px 1px 2px #dddddd;
+            border-radius: 10px;
+        }
+        .tocao_menu li img{
+            flex: 1;
+            width: 0.3rem;
+            height: 0.3rem;
+        }
+        .tocao_menu li{
+            width: 2rem;
+            display: flex;
+            align-items: center;
+            margin: 0 0.05rem;
+        }
+        .tocao_menu a{
+            text-align: left;
+            flex: 3;
+            border-bottom: 1px solid #DFDFDF;
+            font-size: 0.2rem;
+            color: #5d5d5d;
+        }
+    </style>
+</head>
+<body>
+<div class="goods_list_top">
+    <div class="top_style">
+        <a href="{:url('Goods/store_index')}" class="left"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+        <span class="center">便利店</span>
+        <a href="Javascript:;" class="tucao_nav_r"><img src="__MOBILE__/svg/more.svg" alt=""></a>
+        <include file="public:top_right_menu" />
+    </div>
+</div>
+<div class="goods_list">
+    <div class="goods_list_left">
+        <ul>
+            <!--<li><a href="javascript:void(0)">热销推荐</a></li>-->
+            <foreach $category as $list>
+              	<li index="{$list.index}"><a href="javascript:void(0)">{$list.mobile_name}</a></li>
+            </foreach>
+        </ul>
+    </div>
+    <div class="goods_list_right">
+        <foreach name="shop" item="list" key="k">
+            <ul index="{$k}" class="goods_list_right_ul" id="rexiao">
+                <p class="goods_list_tit">{$list.title}</p>
+                <foreach name="list.content" item="item">
+                <li class="goods_list_right_li">
+                    <div class="goods_pic"><img class="lazy" data-original="{$item.thumbnail_img}" src="__MOBILE__/img/loading.gif" alt=""></div>
+                    <div class="goods_info">
+                        <p class="goods_tit">{$item.goods_name}</p>
+                        <ul class="goods_other">
+                            <li style="color: #bbbbbb;">规格：{$item.spec}</li>
+                            <li style="color: #bbbbbb;">单位：{$item.company}</li>
+                            <li>市场价格：<span <if condition="$item.tiptop eq 0">class="comp_price"</if> >{$item.market_price}</span>元</li>
+                            <li>淘宝价格：<span <if condition="$item.tiptop eq 1">class="comp_price"</if> >{$item.taobao_price}</span>元</li>
+                            <li>华润超市价格：<span <if condition="$item.tiptop eq 2">class="comp_price"</if> >{$item.huarun_price}</span>元</li>
+                        </ul>
+                        <div class="goods_p_b">
+                            <span class="price">¥{$item.shop_price}</span>
+                            <p class="price_btn">
+                                <!-- display: inline-block;-->
+                                <a class="goods_list_btn goods_list_btn_jia" href="javascript:;">
+                                    <img src="__MOBILE__/svg/jia.svg" width="30px" alt="">
+                                </a>
+                                <php>
+                                    if(!empty($is_goods)){
+                                        if(in_array($item['goods_sn'],array_keys($is_goods))){
+                                            echo '<a class="goods_list_btn goods_list_btn_num">'.$is_goods[$item['goods_sn']].'</a>';
+                                            echo '<a class="goods_list_btn goods_list_btn_jian" href="javascript:;" style="display: inline-block">
+                                                       <img src="__MOBILE__/svg/jian.svg" width="30px" alt="">
+                                                   </a>';
+                                        }else{
+                                            echo '<a class="goods_list_btn goods_list_btn_num"></a>
+                                                   <a class="goods_list_btn goods_list_btn_jian" href="javascript:;">
+                                                       <img src="__MOBILE__/svg/jian.svg" width="30px" alt="">
+                                                   </a>';
+                                        }
+                                    }else{
+                                        echo '<a class="goods_list_btn goods_list_btn_num"></a>
+                                               <a class="goods_list_btn goods_list_btn_jian" href="javascript:;">
+                                                   <img src="__MOBILE__/svg/jian.svg" width="30px" alt="">
+                                               </a>';
+                                    }
+                                </php>
+                            </p>
+                        </div>
+                    </div>
+                    <input type="hidden" readonly="readonly" value="{$item.goods_sn}" />
+                </li>
+                </foreach>
+            </ul>
+        </foreach>
+    </div>
+</div>
+<div class="goods_footer">
+    <div class="weui-cell__hd goods_bot_car" style="position: relative;" id="gwc_btn">
+        <img src="__MOBILE__/svg/gouwuche.svg">
+        <span class="weui-badge" id="tot_num" style="position: absolute;top: -.2em;right: .4em;">0</span>
+    </div>
+    <div class="goods_bot_l">
+        <p class="goods_tot">¥</p><p class="goods_tot" id="tot_price"></p>
+        <p class="goods_tot_ys">(已省¥<span id="comp_tot">0</span>)</p>
+    </div>
+    <div class="goods_bot_r">
+        <a href="javascript:;" onclick="onpurchase()">下单</a>
+    </div>
+</div>
+
+<div id="zz"></div>
+<div class="zhezhao" style="display: none; font-size: 0.2rem;">
+    <div class="zhezhao_tit"><span>已选商品</span><span class="clear_car">清空购物车</span></div>
+    <ul class="zhezhao_ul">
+    </ul>
+</div>
+<input type="hidden" name="" value="" id="hehe">
+<include file="public:layer" />
+<script src="http://apps.bdimg.com/libs/jquery-lazyload/1.9.5/jquery.lazyload.min.js"></script>
+<script src="__MOBILE__/js/goods_list.js"></script>
+<!-- <script src="__MOBILE__/js/rem.js"></script> -->
+<script>
+    
+        window.onload = function(){
+        var right_oul = document.getElementsByClassName('goods_list_right_ul');
+        var hehe = document.getElementById('hehe');
+        hehe.value = sessionStorage.getItem('val');
+        if(hehe.value!=''){
+            var hehe_index = parseInt(hehe.value);
+            for(var i = 0;i<right_oul.length;i++){
+                if(right_oul[i].getAttribute('index') == hehe_index){
+                    var otop = right_oul[i].offsetTop;
+                    window.scrollTo(0, otop);
+                }
+            }
+        }
+        add_btn();
+        list_scro();
+        reduce_btn();
+    };
+        //右上角菜单显示与隐藏
+    $('.tucao_nav_r').click(function () {
+        $('.tocao_menu').fadeToggle();
+    });
+    add_btn();
+    list_scro();
+    reduce_btn();
+    //懒加载
+    $("img.lazy").lazyload();
+
+    //点击图片看大图
+    if (typeof window.WeixinJSBridge == "undefined"){
+        $(document).on('WeixinJSBridgeReady', function()
+        {
+            funcReadImgInfo();
+        });
+    }else{
+        funcReadImgInfo();
+    }
+    function funcReadImgInfo(){
+        var imgs = [];
+        var imgObj = $(".lazy");//这里改成相应的对象
+        for(var i=0; i<imgObj.length; i++){
+            imgs.push('http://www.8yi2345.com'+imgObj.eq(i).data('original'));
+            imgObj.eq(i).click(function(){
+                var nowImgurl = 'http://www.8yi2345.com'+$(this).data('original');
+                WeixinJSBridge.invoke("imagePreview",{
+                    "urls":imgs,
+                    "current":nowImgurl
+                });
+            });
+        }
+    }
+
+    // 下单
+    function onpurchase(){
+        if(arr.length <= 0){
+            return false;
+        }
+        var form = $("<form></form>");
+        form.attr('action',"");
+        form.attr('method','post');
+        arr.forEach(function (thisValue,k) {
+            var input1 = "<input type='hidden' readonly='readonly' name='" + thisValue.getElementsByTagName('input')[0].value + "' value='" + thisValue.getElementsByClassName('goods_list_btn_num')[0].innerHTML + "'/>";
+            form.append(input1);
+        });
+        $.ajax({
+            url:"{:url('Order/ajaxRecord')}",
+            type: "post",
+            data: form.serialize(),
+            dataType:'json',
+            success:function (e) {
+                if(e.ret === 1){
+                    window.location.href="{:url('Order/on_order')}";
+                }else{
+                    layer.msg(e.msg(),{icon:2,time:3000});
+                }
+            },
+            error:function(er){
+                layer.msg(er,{icon:2,time:3000});
+            }
+        });
+    }
+</script>
+</body>
+</html>

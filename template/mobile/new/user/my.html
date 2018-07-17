@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <include file="public:head" title="邻居联盟" />
+</head>
+<body id="my-body">
+<div class="cont-my">
+    <div class="my-top-wrapper">
+        <div class="my-top-bg" <notempty name="$user.photo">style="background-image: url('{$user.photo}');"</notempty>></div>
+        <div class="my-top">
+            <div class="my-tit">
+                <!--<span>我的</span>-->
+            </div>
+            <div class="my-logo">
+                <notempty name="$user['photo']">
+                    <img src="{$user.photo}" alt="头像" />
+                <else />
+                    <img src="__COMMON__/img/default_head.jpg" alt="头像" />
+                </notempty>
+            </div>
+            <div class="my-lev">
+                <!--<span><img src="__MOBILE__/svg/dengji.svg" alt=""></span><i>33</i>
+                <span><img src="__MOBILE__/svg/zuanshi.svg" alt=""></span><i>00</i>-->
+            </div>
+            <div class="my-name">
+                <span>{$user.nickname|get_sub=###,24,7}</span>
+                <switch name="$user.sex">
+                    <case value="1">
+                        <img src="__MOBILE__/svg/nan.svg" alt="">
+                    </case>
+                    <case value="2">
+                        <img src="__MOBILE__/svg/nv.svg" alt="">
+                    </case>
+                </switch>
+            </div>
+            <!--<div class="my-info">
+                <span>关注 <i>{$user.follow}</i></span>
+                <span>粉丝 <i>{$user.fans}</i></span>
+            </div>-->
+        </div>
+    </div>
+    <!--<div class="my-cont">
+        <a class="my-cont-nav"><p>0</p><p>参与活动</p></a>
+        <a class="my-cont-nav"><p>0</p><p>发布帖子</p></a>
+        <a class="my-cont-nav"><p>0</p><p>已省金额</p></a>
+    </div>-->
+    <div class="my-list">
+        <div class="my-list-item">
+            <!--<a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__bd">
+                    <p>个人资料</p>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>-->
+            <a class="weui-cell weui-cell_access" href="{:url('Site/list')}">
+                <div class="weui-cell__bd">
+                    <p>地址管理</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </a>
+            <a class="weui-cell weui-cell_access" href="{:url('User/myorder')}">
+                <div class="weui-cell__bd">
+                    <p>全部订单</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </a>
+            <a class="weui-cell weui-cell_access" href="{:url('User/save')}">
+                <div class="weui-cell__bd">
+                    <p>订单盈利</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </a>
+        </div>
+        <div class="my-list-item">
+            <!--<a class="weui-cell weui-cell_access" href="{:url('Message/community')}">
+                <div class="weui-cell__bd">
+                    <p>愿望公池</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </a>-->
+            <!--<a class="weui-cell weui-cell_access" href="{:url('Index/wookranking')}">
+                <div class="weui-cell__bd">
+                    <p>玩家排行版</p>
+                </div>
+                <div class="weui-cell__ft"></div>
+            </a>-->
+            <!--<a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__bd">
+                    <p>身份认证</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <switch name="$user.state">
+                        <case value="1">待审核</case>
+                        <case value="2">已通过</case>
+                        <case value="3">通过</case>
+                        <case value="4">禁止使用</case>
+                        <case value="5">请认证</case>
+                        <default />请认证
+                    </switch>
+                </div>
+            </a>
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__bd">
+                    <p>邀请好友</p>
+                </div>
+                <div class="weui-cell__ft">生成邀请码</div>
+            </a>-->
+        </div>
+    </div>
+    <include file="public:footer" />
+</div>
+</body>
+
+</html>

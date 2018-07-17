@@ -1,0 +1,50 @@
+<div class="weui-tabbar">
+    <a <if condition="$value eq '首页'">href="javascript:void(0)" class="weui-tabbar__item weui-bar__item_active"<else />href="{:url('Index/index')}" class="weui-tabbar__item"</if>>
+        <span style="display: inline-block;position: relative;">
+            <i class="ico-home"></i>
+        </span>
+        <p class="weui-tabbar__label">首页</p>
+    </a>
+    <a href="javascript:void(0)" class="weui-tabbar__item" onclick="footOnclick('消息')">
+        <span style="display: inline-block;position: relative;"><i class="ico-message"></i></span>
+        <p class="weui-tabbar__label">消息</p>
+    </a>
+    <a href="javascript:void(0)" class="weui-tabbar__item" onclick="footOnclick('活动')">
+        <span style="display: inline-block;position: relative;"><i class="ico-activity"></i></span>
+        <p class="weui-tabbar__label">活动</p>
+    </a>
+    <a href="javascript:void(0)" class="weui-tabbar__item" onclick="footOnclick('邻居圈')">
+        <span style="display: inline-block;position: relative;"><i class="ico-neighbourhood"></i></span>
+        <p class="weui-tabbar__label">邻居圈</p>
+    </a>
+    <!--<a <if condition="$value eq '消息'">href="javascript:void(0)" class="weui-tabbar__item weui-bar__item_active"<else />href="{:url('Message/index')}" class="weui-tabbar__item"</if>>
+        <span style="display: inline-block;position: relative;">
+            <i class="ico-message"></i>
+        </span>
+        <p class="weui-tabbar__label">消息</p>
+    </a>
+    <a <if condition="$value eq '活动'">href="javascript:void(0)" class="weui-tabbar__item weui-bar__item_active"<else />href="{:url('Activity/index')}" class="weui-tabbar__item"</if>>
+        <span style="display: inline-block;position: relative;">
+            <i class="ico-activity"></i>
+        </span>
+        <p class="weui-tabbar__label">活动</p>
+    </a>
+    <a <if condition="$value eq '邻居圈'">href="javascript:void(0)" class="weui-tabbar__item weui-bar__item_active"<else />href="{:url('Circle/index')}" class="weui-tabbar__item"</if>>
+        <span style="display: inline-block;position: relative;">
+            <i class="ico-neighbourhood"></i>
+        </span>
+        <p class="weui-tabbar__label">邻居圈</p>
+    </a>-->
+    <a <if condition="$value eq '我的'">href="javascript:void(0)" class="weui-tabbar__item weui-bar__item_active"<else />href="{:url('User/my')}" class="weui-tabbar__item"</if>>
+        <span style="display: inline-block;position: relative;">
+            <i class="ico-my"></i>
+        </span>
+        <p class="weui-tabbar__label">我的</p>
+    </a>
+</div>
+<include file="public:layer" />
+<script>
+    function footOnclick(txt){
+        layer.msg(txt+"模块还在建设，敬请期待！");
+    }
+</script>

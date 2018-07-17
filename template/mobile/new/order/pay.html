@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <include file="public:head" title="邻居联盟"/>
+</head>
+<body id="pay_body">
+<div class="top_style">
+    <a href="{:url('Goods/index')}" class="left"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+    <span class="center">下单成功</span>
+</div>
+<div class="pay_info">
+    <div class="left">
+        <img src="__MOBILE__/svg/qian.svg">
+    </div>
+    <div class="right">
+        <p><span class="tot">¥ {$order.total}</span> （已省{$order.save}）</p>
+        <p>订单编号&nbsp;{$order['order_sn']}</p>
+    </div>
+</div>
+<div class="pay_list_div">
+    <img src="__COMMON__/img/hdfk.png" alt="">
+    <div class="pay_list_txt">订单提交成功</div>
+    <div class="pay_list_txt">15分钟内送达</div>
+</div>
+</body>
+</html>

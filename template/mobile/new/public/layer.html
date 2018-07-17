@@ -1,0 +1,29 @@
+<style>
+    .layui-layer-msg{
+        width: 50%;
+        top:70% !important;
+    }
+    .layui-layer-btn{
+        font-size: 0.3rem;
+    }
+</style>
+<!-- 独立弹框 -->
+<script type="text/javascript" src='__COMMON__/js/jquery-1.8.3.min.js'></script>
+<script type="text/javascript" src="__COMMON__/layer/layer.js"></script>
+<script>
+    /**
+     * 上传时候 禁止用户点击
+     */
+    function load()
+    {
+        layer.load(1,{shade: [0.7, '#393D49']}, {shadeClose: true});
+    }
+
+    /**
+     * 上传完成 或者  失败的时候  清除点击
+     */
+    function clearLoad()
+    {
+        layer.closeAll();
+    }
+</script>

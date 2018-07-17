@@ -1,0 +1,51 @@
+<notempty name="order">
+    <ul class="weui-cells">
+        <foreach name="order" item="list">
+            <li class="weui-cell">
+                <div class="weui-cell__bd my_order_detail">
+                    <div class="pszt">
+                        <span class="lef"><em>订单号：</em>{$list.order_sn}</span>
+                        <span class="rig">
+                            <switch name="list.order_state">
+                                <case value="1">已完成</case>
+                                <default />
+                                    未完成
+                            </switch>
+                        </span>
+                    </div>
+                    <div class="my_order_detail_pic">
+                        <ul>
+                            <php>
+                                if(!empty($list['imgs'])){
+                                    $list['imgs'] = json_decode($list['imgs'],true);
+                                    foreach($list['imgs'] as $img){
+                                        echo '<li style="margin-right: 3px"><img src="'.$img.'" alt=""></li>';
+                                    }
+                                }else{
+                                    echo '<li style="margin-right: 3px"><img src="__MOBILE__/img/a.png" alt=""></li>';
+                                }
+                            </php>
+                        </ul>
+                        <div class="my_order_detail_jg">
+                            <span class="rig hj">￥ {$list.total}</span>
+                            <!--<span class="rig">(￥3.54)</span>-->
+                            <span class="rig">共{$list.total_number}个</span>
+                        </div>
+                        <div class="my_order_detail_time">
+                            <span class="lef">下单时间：{$list.addtime|date="Y-m-d H:i",###}</span>
+                            <!--<a href="javascript:;" class="qxdd weui-btn weui-btn_mini weui-btn_default rig">取消订单</a>-->
+                            <a href="{:url('Order/pays',['type'=>$orderType,'order_sn'=>$list.order_sn])}" class="ljzf weui-btn weui-btn_mini rig">订单详情</a>
+                            <!--<a href="javascript:;" class="ljzf weui-btn weui-btn_mini rig">立即支付</a>-->
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </foreach>
+    </ul>
+    <else />
+    <div class="page__bd">
+        <div class="weui-loadmore weui-loadmore_line">
+            <span class="weui-loadmore__tips">暂无数据</span>
+        </div>
+    </div>
+</notempty>

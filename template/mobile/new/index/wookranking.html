@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>邻居联盟</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+    <meta name="viewport"   content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="__MOBILE__/css/weui.css">
+    <link rel="stylesheet" href="__MOBILE__/css/reset.css">
+    <link rel="stylesheet" href="__MOBILE__/css/save.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/css/swiper.css">
+    <style>
+    .num{
+        display: inline-block;
+        width: 0.4rem;
+        text-align: center;
+    }
+    </style>
+</head>
+<body style="background: #f3f3f3">
+<div class="save_body">
+    <div class="save_nav">
+        <a href="Javascript:history.back()" class="save_nav_l"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+        <span id="bar">本周排行榜</span>
+        <a href="Javascript:;" class="save_nav_r"><img src="__MOBILE__/svg/more.svg" alt=""></a>
+        <include file="public:top_right_menu" />
+    </div>
+    <div id="tabs-container" class="swiper-container swiper-container-horizontal">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide swiper-slide-active">
+                <notempty name="rankingList">
+                    <!--  前三名 -->
+                    <div class="save_top">
+                        <div class="save_top_bg">
+                            <div class="no2">
+                                <div class="no2_img">
+                                    <img src="__MOBILE__/img/huangguan2.png" class="huangguan1" alt="">
+                                    <img src="<?php echo isset($rankingList[1]['photo'])?(empty($rankingList[1]['photo'])?'__COMMON__/img/default_head.jpg':$rankingList[1]['photo']):'__COMMON__/img/rankingbg.png';?>" class="img2" alt="头像" />
+                                    <img src="__MOBILE__/img/number2.png" class="number1" alt="">
+                                </div>
+                                <div class="no2_span">
+                                    <p class="no2_name">{$rankingList[1]['nickname'] ?? ""}</p>
+                                    <p class="ysje"><?php echo isset($rankingList[1]['s_save'])?"¥".$rankingList[1]['s_save']:""; ?></p>
+                                </div>
+                            </div>
+                            <div class="no1">
+                                <div class="n1_bg"></div>
+                                <div class="no1_img">
+                                    <img src="__MOBILE__/img/huangguan1.png" class="huangguan1" alt="">
+                                    <img src="__MOBILE__/img/sanjiao_l.png" class="sanjiao_l" alt="">
+                                    <img src="__MOBILE__/img/sanjiao_r.png" class="sanjiao_r" alt="">
+                                    <img src="<?php echo isset($rankingList[0]['photo'])?(empty($rankingList[0]['photo'])?'__COMMON__/img/default_head.jpg':$rankingList[0]['photo']):'__COMMON__/img/rankingbg.png';?>" class="img2" alt="头像" />
+                                    <img src="__MOBILE__/img/number1.png" class="number1" alt="">
+                                </div>
+                                <div class="no1_span">
+                                    <p class="no1_name">{$rankingList[0]['nickname'] ?? ""}</p>
+                                    <p class="ysje"><?php echo isset($rankingList[0]['s_save'])?"¥".$rankingList[0]['s_save']:""; ?></p>
+                                </div>
+                            </div>
+                            <div class="no3">
+                                <div class="no3_img">
+                                    <img src="__MOBILE__/img/huangguan3.png" class="huangguan1" alt="">
+                                    <img src="<?php echo isset($rankingList[2]['photo'])?(empty($rankingList[2]['photo'])?'__COMMON__/img/default_head.jpg':$rankingList[2]['photo']):'__COMMON__/img/rankingbg.png';?>" class="img2" alt="头像" />
+                                    <img src="__MOBILE__/img/number3.png" class="number1" alt="">
+                                </div>
+                                <div class="no3_span">
+                                    <p class="no3_name">{$rankingList[2]['nickname'] ?? ""}</p>
+                                    <p class="ysje"><?php echo isset($rankingList[2]['s_save'])?"¥".$rankingList[2]['s_save']:""; ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="save_list">
+                        <!-- 自己 -->
+                        <foreach name="$rankingList" item="value" key="k_one">
+                            <if condition="$value.uid eq $user.id">
+                                <div class="save_me">
+                                    <div class="weui-cells">
+                                        <div class="weui-cell">
+                                            <div class="weui-cell__hd">
+                                                <notempty name="$value['photo']">
+                                                    <img src="{$value['photo']}" alt="头像" width="40" height="40" />
+                                                    <else />
+                                                    <img src="__COMMON__/img/default_head.jpg" alt="头像" width="40" height="40" />
+                                                </notempty>
+                                            </div>
+                                            <div class="weui-cell__bd">
+                                                <p>{$value.nickname}</p>
+                                                <p>排名:{$k_one+1}</p>
+                                            </div>
+                                            <div class="weui-cell__ft">¥{$value.s_save}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </if>
+                        </foreach>
+                        <!-- 其它 -->
+                        <div class="save_list_other">
+                            <div class="weui-cells">
+                                <foreach name="$rankingList" item="list" key="k">
+                                    <if condition="$k gt 2">
+                                        <div class="weui-cell">
+                                            <span class="num">{$k+1}</span>
+                                            <div class="weui-cell__hd">
+                                                <notempty name="$list['photo']">
+                                                    <img src="{$list['photo']}" alt="头像" />
+                                                    <else />
+                                                    <img src="__COMMON__/img/default_head.jpg" alt="头像" />
+                                                </notempty>
+                                            </div>
+                                            <div class="weui-cell__bd">
+                                                <p>{$list.nickname}</p>
+                                            </div>
+                                            <div class="weui-cell__ft">¥{$list.s_save}</div>
+                                        </div>
+                                    </if>
+                                </foreach>
+                            </div>
+                        </div>
+                    </div>
+                    <else/>
+                    <div class="page__bd">
+                        <div class="weui-loadmore weui-loadmore_line">
+                            <span class="weui-loadmore__tips">暂无数据</span>
+                        </div>
+                    </div>
+                </notempty>
+            </div>
+            <div class="swiper-slide swiper-slide-next">
+                <notempty name="historyList">
+                    <!--  前三名 -->
+                    <div class="save_top">
+                        <div class="save_top_bg">
+                            <div class="no2">
+                                <div class="no2_img">
+                                    <img src="__MOBILE__/img/huangguan2.png" class="huangguan1" alt="">
+                                    <img src="<?php echo isset($historyList[1]['photo'])?(empty($historyList[1]['photo'])?'__COMMON__/img/default_head.jpg':$historyList[1]['photo']):'__COMMON__/img/rankingbg.png';?>" class="img2" alt="头像" />
+                                    <img src="__MOBILE__/img/number2.png" class="number1" alt="">
+                                </div>
+                                <div class="no2_span">
+                                    <p class="no2_name">{$historyList[1]['nickname'] ?? ""}</p>
+                                    <p class="ysje"><?php echo isset($historyList[1]['save_week'])?"¥".$historyList[1]['save_week']:""; ?></p>
+                                </div>
+                            </div>
+                            <div class="no1">
+                                <div class="n1_bg"></div>
+                                <div class="no1_img">
+                                    <img src="__MOBILE__/img/huangguan1.png" class="huangguan1" alt="">
+                                    <img src="__MOBILE__/img/sanjiao_l.png" class="sanjiao_l" alt="">
+                                    <img src="__MOBILE__/img/sanjiao_r.png" class="sanjiao_r" alt="">
+                                    <img src="<?php echo isset($historyList[0]['photo'])?(empty($historyList[0]['photo'])?'__COMMON__/img/default_head.jpg':$historyList[0]['photo']):'__COMMON__/img/rankingbg.png';?>" class="img2" alt="头像" />
+                                    <img src="__MOBILE__/img/number1.png" class="number1" alt="">
+                                </div>
+                                <div class="no1_span">
+                                    <p class="no1_name">{$historyList[0]['nickname'] ?? ""}</p>
+                                    <p class="ysje"><?php echo isset($historyList[0]['save_week'])?"¥".$historyList[0]['save_week']:""; ?></p>
+                                </div>
+                            </div>
+                            <div class="no3">
+                                <div class="no3_img">
+                                    <img src="__MOBILE__/img/huangguan3.png" class="huangguan1" alt="">
+                                    <img src="<?php echo isset($historyList[2]['photo'])?(empty($historyList[2]['photo'])?'__COMMON__/img/default_head.jpg':$historyList[2]['photo']):'__COMMON__/img/rankingbg.png';?>" class="img2" alt="头像" />
+                                    <img src="__MOBILE__/img/number3.png" class="number1" alt="">
+                                </div>
+                                <div class="no3_span">
+                                    <p class="no3_name">{$historyList[2]['nickname'] ?? ""}</p>
+                                    <p class="ysje"><?php echo isset($historyList[2]['save_week'])?"¥".$historyList[2]['save_week']:""; ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="save_list">
+                        <!-- 自己 -->
+                        <foreach name="$historyList" item="value" key="k_one">
+                            <if condition="$value.uid eq $user.id">
+                                <div class="save_me">
+                                    <div class="weui-cells">
+                                        <div class="weui-cell">
+                                            <div class="weui-cell__hd">
+                                                <notempty name="$value['photo']">
+                                                    <img src="{$value['photo']}" alt="头像" width="40" height="40" />
+                                                    <else />
+                                                    <img src="__COMMON__/img/default_head.jpg" alt="头像" width="40" height="40" />
+                                                </notempty>
+                                            </div>
+                                            <div class="weui-cell__bd">
+                                                <p>{$value.nickname}</p>
+                                                <p>排名:{$k_one+1}</p>
+                                            </div>
+                                            <div class="weui-cell__ft">¥{$value.save_week}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </if>
+                        </foreach>
+                        <!-- 其它 -->
+                        <div class="save_list_other">
+                            <div class="weui-cells">
+                                <foreach name="$historyList" item="list" key="k">
+                                    <if condition="$k gt 2">
+                                        <div class="weui-cell">
+                                            <span class="num">{$k+1}</span>
+                                            <div class="weui-cell__hd">
+                                                <notempty name="$list['photo']">
+                                                    <img src="{$list['photo']}" alt="头像" />
+                                                    <else />
+                                                    <img src="__COMMON__/img/default_head.jpg" alt="头像" />
+                                                </notempty>
+                                            </div>
+                                            <div class="weui-cell__bd">
+                                                <p>{$list.nickname}</p>
+                                            </div>
+                                            <div class="weui-cell__ft">¥{$list.save_week}</div>
+                                        </div>
+                                    </if>
+                                </foreach>
+                            </div>
+                        </div>
+                    </div>
+                    <else/>
+                    <div class="page__bd">
+                        <div class="weui-loadmore weui-loadmore_line">
+                            <span class="weui-loadmore__tips">暂无数据</span>
+                        </div>
+                    </div>
+                </notempty>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__MOBILE__/js/rem.js"></script>
+<script src="__MOBILE__/js/weui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/js/swiper.js"></script>
+<script src="http://apps.bdimg.com/libs/jquery/1.8.0/jquery.js"></script>
+<script>
+    var mySwiper = new Swiper('.swiper-container',{
+        pagination :{
+            // type: 'custom',
+            el: '.tabs',
+            clickable :true
+        },
+        on:{
+            slideChangeTransitionStart: function(){
+                console.log(this.activeIndex);
+                var bar = $("#bar");
+                if(this.activeIndex === 0){
+                    bar.html("本周排行榜")
+                }else if(this.activeIndex === 1){
+                    bar.html("上周排行榜")
+                }
+            },
+        },
+    });
+
+    var obtn_r = document.getElementsByClassName('save_nav_r')[0];
+    var omenu = document.getElementsByClassName('save_menu')[0];
+    obtn_r.onclick = function () {
+        if(omenu.style.display=='none'){
+            omenu.style.display='block';
+        }else{
+            omenu.style.display='none';
+        }
+    };
+</script>
+</body>
+</html>

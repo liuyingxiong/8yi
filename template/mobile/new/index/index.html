@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <include file="public:head" title="邻居联盟" />
+    <style>
+        #my_building,#share,#fun{
+            position: relative;
+        }
+        .liantiao{
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            top: 0;
+            right: -8px;
+        }
+        .eng{
+            font-size: 0.2rem;!important;
+        }
+        #hid{
+            visibility : hidden;!important;
+        }
+    </style>
+</head>
+<body>
+    <div class="cont">
+        <div class="home-form-title">
+            <h1>邻居联盟</h1>
+            <h2>league of neigbhor</h2>
+            <h4>我们要做的是让八亿人认识自己的邻居</h4>
+        </div>
+
+        <div class="home-form-row">
+            <!--<a href="javascript:void(0)">
+                <div class="home-form-row__item" id="my_building">
+                    <img class="liantiao" src="__MOBILE__/svg/liantiao2.svg" alt="">
+                    <span class="home-form-row__item__lab__span">敬请期待</span>
+                    <img class="home-form-row__item__img" src="__MOBILE__/svg/linju.svg">
+                    <div class="home-form-row__item__lab">
+                        <span class="home-form-row__item__lab__span">我这栋</span>
+                        <span class="home-form-row__item__lab__span eng">MY HOUSE</span>
+                    </div>
+                </div>
+            </a>-->
+            <a href="{:url('Goods/store_index')}">
+                <div class="home-form-row__item" id="blog">
+                    <span class="home-form-row__item__lab__span" id="hid">敬请期待</span>
+                    <img class="home-form-row__item__img" src="__MOBILE__/svg/shop.svg">
+                    <div class="home-form-row__item__lab">
+                        <span class="home-form-row__item__lab__span">便利店</span>
+                        <span class="home-form-row__item__lab__span eng">SHOPPING CENTER</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="suo_list">
+            <a href="javascript:;"><div><img src="__MOBILE__/svg/suo.svg" alt=""><p>敬请期待</p></div></a>
+            <a href="javascript:;"><div><img src="__MOBILE__/svg/suo.svg" alt=""><p>敬请期待</p></div></a>
+            <a href="javascript:;"><div><img src="__MOBILE__/svg/suo.svg" alt=""><p>敬请期待</p></div></a>
+        </div>
+        <!--<div class="home-form-row">
+            <a href="javascript:void(0)">
+                <div class="home-form-row__item" id="share">
+                    <img class="liantiao" src="__MOBILE__/svg/liantiao2.svg" alt="">
+                    <span class="home-form-row__item__lab__span">敬请期待</span>
+                    <img class="home-form-row__item__img" src="__MOBILE__/svg/gongxiang.svg">
+                    <div class="home-form-row__item__lab">
+                        <span class="home-form-row__item__lab__span">邻居共享</span>
+                        <span class="home-form-row__item__lab__span eng">NEIGHBORS SHARE</span>
+                    </div>
+                </div>
+            </a>
+            <a href="javascript:void(0)">
+                <div class="home-form-row__item" id="fun">
+                    <img class="liantiao" src="__MOBILE__/svg/liantiao2.svg" alt="">
+                    <span class="home-form-row__item__lab__span">敬请期待</span>
+                    <img class="home-form-row__item__img" src="__MOBILE__/svg/yule.svg">
+                    <div class="home-form-row__item__lab">
+                        <span class="home-form-row__item__lab__span">邻居娱乐</span>
+                        <span class="home-form-row__item__lab__span eng">NEIGHBORS ENT</span>
+                    </div>
+                </div>
+            </a>
+        </div>-->
+    </div>
+    <include file="public:footer" />
+</body>
+</html>

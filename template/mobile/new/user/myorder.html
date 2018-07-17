@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <include file="public:head" title="邻居联盟" />
+    <style>
+        .layui-layer-loading1{
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="body">
+<div class="top_style">
+    <a href="{:url('User/my')}" class="left"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+    <span class="center">我的订单</span>
+</div>
+
+<div class="weui-tab my_order_tab my_order_list" id="tab">
+    <div class="weui-navbar">
+        <div class="weui-navbar__item <if condition='$orderType eq 0'>weui-bar__item_on</if> " data-type="0">全部</div>
+        <div class="weui-navbar__item <if condition='$orderType eq 1'>weui-bar__item_on</if> " data-type="1">待付款</div>
+        <div class="weui-navbar__item <if condition='$orderType eq 2'>weui-bar__item_on</if> " data-type="2">待配送</div>
+        <div class="weui-navbar__item <if condition='$orderType eq 3'>weui-bar__item_on</if> " data-type="3">已完成</div>
+    </div>
+    <div class="weui-tab__panel"></div>
+</div>
+<include file="public:layer" />
+</body>
+<script type="text/javascript">
+    // 初始页面
+    var type = {$orderType};
+    order_ajax(type);
+
+    // 订单分类点击事件
+    $(".weui-navbar__item").click(function () {
+        $(".weui-navbar__item").removeClass("weui-bar__item_on");
+        $(this).addClass("weui-bar__item_on");
+        type = $(this).data("type");
+        order_ajax(type);
+    })
+
+    // AJAX局部刷新
+    function order_ajax(type){
+        layer.load(1,{shade: [0.7, '#393D49']}, {shadeClose: true});
+        $.ajax({
+            url:"{:url('User/myorderajax')}",
+            type: "post",
+            data: {type:type},
+            dataType:'json',
+            success:function (e) {
+                layer.closeAll();
+                $(".weui-tab__panel").html("");
+                $(".weui-tab__panel").html(e);
+            },
+            error:function(er){
+                layer.msg(er,{icon:2,time:3000});
+            }
+        });
+    }
+</script>
+</html>

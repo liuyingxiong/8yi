@@ -1,0 +1,59 @@
+<block name="content">
+    <div class="row-fluid sortable ui-sortable">
+        <div class="box span12">
+            <div class="box-header" data-original-title="">
+                <h2><i class="halflings-icon white "></i><span class="break"></span>删除订单</h2>
+                <div class="box-icon">
+                    <a href="javascript:void(0)" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+                </div>
+            </div>
+            <div class="box-content">
+                <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                    <fieldset>
+                        <div class="control-group">
+                            <div class="controls">
+                                <ul>
+                                    <li>备注: 本删除订单页面可以删除全部状态的订单  慎用！</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">订单号</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="order_sn" type="text" value=""/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" onclick="delOrder()">删除</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function delOrder(){
+            var obj = $("input[name='order_sn']");
+            var order_sn = obj.val().trim();
+            if(order_sn.length >= 1){
+                load();
+                $.ajax({
+                    type : 'post',
+                    url : "{:url('Order/forcedel')}",
+                    data : {order_sn:order_sn},
+                    dataType : 'json',
+                    success : function(ret){
+                        console.log(ret);
+                        layer.closeAll();
+                        if(ret.ret === 1){
+                            layer.msg(ret.msg,{icon:1,time:3000});
+                            obj.val("");
+                        }else{
+                            layer.msg(ret.msg,{icon:2,time:3000});
+                        }
+                    }
+                })
+            }
+        }
+    </script>
+</block>

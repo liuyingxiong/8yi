@@ -1,0 +1,133 @@
+<!-- 原版JQ时间插件 -->
+
+<!-- 插件js文件 -->
+<!--<script src="/public/static/common/jsDate/jquery.date.js"></script>-->
+
+
+<!-- 新版js时间插件 -->
+<link type="text/css" rel="stylesheet" href="__COMMON__/jedate/skin/jedate.css">
+<script type="text/javascript" src="__COMMON__/jedate/src/jedate.js"></script>
+<script type="text/javascript">
+    /**
+     * 时间插件点击事件
+     * @param inputIdDate string  元素ID
+     * @param minTime     string  最小时间
+     */
+    function on_jeDate(inputIdDate,minTime) {
+        if(minTime === ""){
+            var date = new Date();
+            var sign1 = "-";
+//            var sign2 = ":";
+            var year = date.getFullYear(); // 年
+            var month = date.getMonth() + 1; // 月
+            var day  = date.getDate(); // 日
+            /*var hour = date.getHours(); // 时
+            var minutes = date.getMinutes(); // 分
+            var seconds = date.getSeconds(); //秒*/
+            // 给一位数数据前面加 “0”
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (day >= 0 && day <= 9) {
+                day = "0" + day;
+            }
+            /*if (hour >= 0 && hour <= 9) {
+                hour = "0" + hour;
+            }
+            if (minutes >= 0 && minutes <= 9) {
+                minutes = "0" + minutes;
+            }
+            if (seconds >= 0 && seconds <= 9) {
+                seconds = "0" + seconds;
+            }*/
+            minTime = year + sign1 + month + sign1 + day;
+            /*minTime = year + sign1 + month + sign1 + day + " " + hour + sign2 + minutes + sign2 + seconds;*/
+        }
+        jeDate("#"+inputIdDate,{
+            format:"YYYY-MM-DD hh:mm:ss",              //日期格式
+            minDate:minTime,                           //最小日期 或者 "1900-01-01" 或者 "10:30:25"
+            isTime:false,
+            clearfun:function() {                      //清除日期后的回调, elem当前输入框ID, val当前选择的值
+                document.getElementById("etime").value="";
+            },
+            donefun:function(obj) {                    //点击确定后的回调,obj包含{ elem当前输入框ID, val当前选择的值, date当前的日期值}
+                if(obj.elem.id === "stime"){
+                    document.getElementById("etime").value="";
+                }
+            },
+            success:function(elem) {}                  //层弹出后的成功回调方法, elem当前输入框ID*/
+           /* skinCell:"jedateblue",                      //日期风格样式，默认蓝色
+            format:"YYYY-MM-DD hh:mm:ss",               //日期格式
+            minDate:"1900-01-01 00:00:00",              //最小日期 或者 "1900-01-01" 或者 "10:30:25"
+            maxDate:"2099-12-31 23:59:59",              //最大日期 或者 "2099-12-31" 或者 "16:35:25"
+            language:{                                  //多语言设置
+                name  : "cn",
+                month : ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"],
+                weeks : [ "日", "一", "二", "三", "四", "五", "六" ],
+                times : ["小时","分钟","秒数"],
+                titText: "请选择日期时间",
+                clear : "清空",
+                today : "今天",
+                yes   : "确定",
+                close : "关闭"
+            },
+            isShow:true,                                //是否显示为固定日历，为false的时候固定显示
+            multiPane:true,                             //是否为双面板，为false是展示双面板
+            onClose:true,                               //是否为选中日期后关闭弹层，为false时选中日期后关闭弹层
+            range:null,                                 //如果不为空，则会进行区域选择，例如 " 至 "，" ~ "，" To "
+            trigger:"click",                            //是否为内部触发事件，默认为内部触发事件
+            position:[],                                //自定义日期弹层的偏移位置，长度为0，弹层自动查找位置
+            valiDate:[],                                //有效日期与非有效日期，例如 ["0[4-7]$,1[1-5]$,2[58]$",true]
+            isinitVal:false,                            //是否初始化时间，默认不初始化时间
+            initDate:{},                                //初始化时间，加减 天 时 分
+            isTime:true,                                //是否开启时间选择
+            isClear:true,                               //是否显示清空
+            isToday:true,                               //是否显示今天或本月
+            festival:false,                             //是否显示农历节日
+            fixed:true,                                 //是否静止定位，为true时定位在输入框，为false时居中定位
+            zIndex:2099,                                //弹出层的层级高度
+            marks:null,                                 //给日期做标注
+            clearfun:function(elem, val) {},            //清除日期后的回调, elem当前输入框ID, val当前选择的值
+            donefun:function(obj) {},                   //点击确定后的回调,obj包含{ elem当前输入框ID, val当前选择的值, date当前的日期值}
+            success:function(elem) {}                  //层弹出后的成功回调方法, elem当前输入框ID*/
+        })
+    }
+
+    /**
+     * 时间插件点击事件  搜索
+     * @param inputIdDate string  元素ID
+     * @param minTime     string  最小时间
+     */
+    function on_search_jeDate(inputIdDate,minTime) {
+        if(minTime == ""){
+            jeDate("#"+inputIdDate,{
+                format:"YYYY-MM-DD hh:mm:ss",              //日期格式
+                isTime:false,
+                clearfun:function() {                      //清除日期后的回调, elem当前输入框ID, val当前选择的值
+                    document.getElementById("etime").value="";
+                },
+                donefun:function(obj) {                    //点击确定后的回调,obj包含{ elem当前输入框ID, val当前选择的值, date当前的日期值}
+                    if(obj.elem.id === "stime"){
+                        document.getElementById("etime").value="";
+                    }
+                },
+                success:function(elem) {}                  //层弹出后的成功回调方法, elem当前输入框ID*/
+            })
+        }else{
+            jeDate("#"+inputIdDate,{
+                format:"YYYY-MM-DD hh:mm:ss",              //日期格式
+                minDate:minTime,                           //最小日期 或者 "1900-01-01" 或者 "10:30:25"
+                isTime:false,
+                clearfun:function() {                      //清除日期后的回调, elem当前输入框ID, val当前选择的值
+                    document.getElementById("etime").value="";
+                },
+                donefun:function(obj) {                    //点击确定后的回调,obj包含{ elem当前输入框ID, val当前选择的值, date当前的日期值}
+                    if(obj.elem.id === "stime"){
+                        document.getElementById("etime").value="";
+                    }
+                },
+                success:function(elem) {}                  //层弹出后的成功回调方法, elem当前输入框ID*/
+            })
+        }
+    }
+</script>

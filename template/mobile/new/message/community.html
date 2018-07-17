@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>邻居联盟</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="__MOBILE__/css/weui.css">
+    <link rel="stylesheet" href="__MOBILE__/css/reset.css">
+    <link rel="stylesheet" href="__MOBILE__/css/tucao.css">
+    <style>
+    .reply_a{
+        color: #000;
+        font-size: .26rem;
+    }
+    .guize{
+        position: fixed;
+        bottom: 2rem;
+        left: 0.1rem;
+        z-index: 999;
+    }
+    .guize img{
+        width: 0.8rem;
+    }
+    .weui-dialog__bd p{
+        text-align: left;
+    }
+    .dialog_p{
+        color: red;
+    }
+    </style>
+</head>
+<body>
+<div class="guize"><img src="__MOBILE__/img/guize.png" alt=""></div>
+<div class="tucao_body">
+    <div class="tucao_nav">
+        <!--<a href="Javascript:history.back()" class="tucao_nav_l"><img src="__MOBILE__/svg/left.svg" alt=""></a>-->
+        <a href="{:url('Goods/store_index')}" class="tucao_nav_l"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+        <span>邻里心愿</span>
+        <a href="Javascript:;" class="tucao_nav_r"><img src="__MOBILE__/svg/more.svg" alt=""></a>
+        <include file="public:top_right_menu" />
+    </div>
+    <notempty name="messageList">
+    <ul class="tucao_list" style="margin-bottom: 2rem">
+        <foreach name="messageList" item="item">
+        <li class="tucao_list_li">
+            <div class="tucao_list_div">
+                <div class="tucao_list_l">
+                    <a href="javascript:;"><img src="<notempty name='$item.photo'>{$item.photo}<else />__COMMON__/img/default_head.jpg</notempty>" alt=""></a>
+                </div>
+                <div class="tucao_list_r">
+                    <div class="nick_name"><notempty name="$item.nickname">{$item.nickname}<else />匿名</notempty></div>
+                    <div class="user_sex">
+                        <switch name="$item.sex">
+                            <case value="1"><img src="__MOBILE__/svg/nan.svg" alt=""></case>
+                            <case value="2"><img src="__MOBILE__/svg/nv.svg" alt=""></case>
+                        </switch>
+                    </div>
+                    <div class="tucao_content">{$item.subject_txt}</div>
+                    <notempty name="$item['com_imgs']">
+                    <ul class="tucao_cont_pic">
+                        <foreach name="$item['com_imgs']" item="img_li">
+                            <li><img class="fangda_pic" src="{$img_li}" alt=''></li>
+                        </foreach>
+                    </ul>
+                    </notempty>
+                    <div class="tucao_cont_stat">
+                        <span class="tucao_time">{$item['create_time']}</span>
+                        <a href="javascript:;" class="comment"><img src="__MOBILE__/svg/xiaoxi2.svg" alt=""></a>
+                        <a href="javascript:;" class="zan"><img src="{$item['zan']}" alt=""><span data-com_id="{$item['com_id']}">{$item['count']}</span></a>
+                    </div>
+                    <ul class="tucao_reply" <empty name="item.clied">style="display:none"</empty> >
+                    <foreach name="item.clied" item="list">
+                    <switch name="list.type">
+                        <case value="1"><li><a href="javascript:;" class="reply_a" data-product_id="{$list.product_id}">{$list.product_name}<span style="color: palevioletred;"> 回复 </span>{$list.reply_name}:{$list.product_text}</a></li></case>
+                        <default /><li><a href="javascript:;" class="reply_a" data-product_id="{$list.product_id}">{$list.product_name}：{$list.product_text}</a></li>
+                    </switch>
+                    </foreach>
+                    </ul>
+                </div>
+            </div>
+            <div class="tucao_huifu_input" style="display: none;">
+                <input class="tucao_input_one" type="text" name="huifu" placeholder="回复" maxlength="50" data-com_id="{$item['com_id']}" data-product_id=""/>
+                <input type="button" class="tc_fs" value="发送">
+            </div>
+        </li>
+        </foreach>
+    </ul>
+    <else />
+    <div class="page__bd">
+        <div class="weui-loadmore weui-loadmore_line">
+            <span class="weui-loadmore__tips">暂无数据</span>
+        </div>
+    </div>
+    </notempty>
+</div>
+<a id="sub_tocao" href="{:url('Message/release_community')}">我要吐槽</a>
+<include file="public:layer" />
+<script src="__MOBILE__/js/zepto.js"></script>
+<script src="__MOBILE__/js/rem.js"></script>
+<script src="__MOBILE__/js/weui.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    var guize = document.getElementsByClassName('guize')[0];
+    var otxt = '<p class="dialog_p">'+'活动时间：'+'</p>'
+        +'<p>'+'2018年7月1日—2018年7月31日'+'</p>'
+        +'<p class="dialog_p">'+'活动内容：'+'</p>'
+        +'<p>'+'1、客户在邻里心愿可以任意发表文字或图片在活动时间内'
+        +'收获点赞数量累计排行的前三名，可获得相应的奖励,'
+        +'<p>'+'2、为冠军点赞者有机会获得5元优惠券 ，月月开奖，月月更新！'+'</p>'
+        +'<p class="dialog_p">'+'活动细则:'+'</p>'
+        +'<p>'+'2018年7月31日后，客户可在便利店首页的互动板块中点' +
+        '击获奖名单查看获奖详情。'+'</p>';
+    guize.onclick = function(){
+        weui.alert(otxt);
+        var obtn = document.getElementsByClassName('weui-dialog__btn')[0];
+        obtn.innerHTML = '知道了';
+    };
+    if (typeof window.WeixinJSBridge == "undefined"){
+        $(document).on('WeixinJSBridgeReady', function()
+        {
+            funcReadImgInfo();
+        });
+    }else{
+        funcReadImgInfo();
+    }
+    function funcReadImgInfo(){
+        var imgs = [];
+        var imgObj = $(".fangda_pic");//这里改成相应的对象
+        for(var i=0; i<imgObj.length; i++){
+            imgs.push('http://www.8yi2345.com'+imgObj.eq(i).attr('src'));
+            imgObj.eq(i).click(function(){
+                var nowImgurl = 'http://www.8yi2345.com'+$(this).attr('src');
+                WeixinJSBridge.invoke("imagePreview",{
+                    "urls":imgs,
+                    "current":nowImgurl
+                });
+            });
+        }
+    }
+    //点击发送后隐藏input输入框
+    $('.tc_fs').click(function () {
+        $(this).parent().fadeOut();
+    });
+    //右上角菜单显示与隐藏
+    $('.tucao_nav_r').click(function () {
+        $('.tocao_menu').fadeToggle();
+    });
+    //滑动屏幕隐藏输入框
+    $(document).bind('touchmove',function () {
+        $('.tucao_huifu_input').fadeOut();
+    });
+    //点击评论按钮显示输入框
+    $('.comment').click(function () {
+        var oInput = $(this).parents('.tucao_list_div').next('.tucao_huifu_input');
+        oInput.children('.tucao_input_one').prop('placeholder','评论');
+        oInput.children('.tucao_input_one').data('product_id','');
+        $('.tucao_huifu_input').hide();
+        oInput.fadeIn();
+    });
+    //点击回复显示隐藏输入框
+    $('.tucao_reply').each(function () {
+        var _index = $('.tucao_reply').index(this);
+        $(this).on('click','.reply_a',function () {
+            var oInput2 = $(this).parents('.tucao_list_div').next('.tucao_huifu_input');
+            var oatt = $(this).data('product_id');
+            oInput2.children('.tucao_input_one').prop('placeholder','回复');
+            oInput2.children('.tucao_input_one').data('product_id',oatt);
+            $('.tucao_huifu_input').hide();
+            oInput2.fadeIn();
+         });
+    });
+
+    /**
+     * 点赞
+     */
+    $(".zan").click(function () {
+        //zan_act 赞过的颜色     zan2 没赞的颜色
+        var _this = $(this);
+        var number = $(this).find("span").html();
+        var com_id = $(this).find("span").data("com_id");
+        load();
+        $.ajax({
+            url:"{:url('Message/fabulous')}",
+            type: "post",
+            data: {com_id:com_id},
+            dataType:'json',
+            success:function (e) {
+                clearLoad();
+                if(e.ret === 1){
+                    _this.find("img").attr('src',e.code);
+                    if(e.msg == '关注成功'){
+                        _this.find("span").html(number*1+1);
+                    }else{
+                        _this.find("span").html(number*1-1);
+                    }
+                }else{
+                    layer.msg(e.msg,{icon:2,time:3000});
+                }
+            }
+        });
+    });
+
+    /**
+     * 点击回复信息 或者 评论事件
+     */
+    $(".tc_fs").click(function () {
+        var ul = $(this).parent().prev().find(".tucao_reply");
+        var inputObj = $(this).prev();
+        var txt = inputObj.val(),
+            type = inputObj.attr("placeholder"),
+            id = inputObj.data("com_id"),
+            product_id = inputObj.data("product_id");
+        if($.trim(txt).length <= 0){
+            layer.msg("请输入文字信息!",{icon:2,time:2000});
+            return false;
+        }
+        if(type == "评论"){
+            type = 0;
+        }else if(type == "回复"){
+            type = 1;
+            var uid = {$user['id']};
+            if(uid == product_id || product_id == ""){
+                inputObj.val("");
+                inputObj.data("product_id","");
+                $(".tucao_huifu_input").css('display',"none");
+                layer.msg("不能回复自己的信息",{icon:2,time:2000});
+                return false;
+            }
+        }else{
+            return false;
+        }
+        load();
+        $.ajax({
+            url:"{:url('Message/realy')}",
+            type: "post",
+            data: {type:type,txt:txt,id:id,product_id:product_id},
+            dataType:'json',
+            success:function (e) {
+                clearLoad();
+                if(e.ret === 1){
+                    inputObj.val("");
+                    $(".tucao_huifu_input").css('display',"none");
+                    ul.css("display",'block');
+                    ul.html(e.code);
+                }else{
+                    layer.msg(e.msg,{icon:2,time:3000});
+                }
+            },
+            error:function(er){
+                clearLoad();
+                layer.msg(er,{icon:2,time:3000});
+            }
+        });
+    });
+</script>
+</body>
+</html>

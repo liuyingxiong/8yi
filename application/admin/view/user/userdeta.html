@@ -1,0 +1,152 @@
+<block name="content">
+    <style>
+        .controls select{
+            width: auto;
+            line-height: 20px;
+            padding: 5px 8px;
+            height: auto;
+        }
+        .controls div{
+            float: left;
+            width: 10%;
+        }
+        .controls div label{
+            float: left;
+            margin: 0;
+            padding: 0;
+            height: 30px;
+            line-height: 30px;
+            width: 30%;
+        }
+        .controls div input{
+            float: left;
+            margin: 0;
+            padding: 0;
+            height: 30px;
+            line-height: 30px;
+            position: relative;
+            top: 1px;
+        }
+        .controls .file-img{
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+        .controls .file-img input{
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            left: 0;
+            opacity: 0;
+        }
+        .controls .file-img div{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <div class="row-fluid sortable ui-sortable">
+        <div class="box span12">
+            <div class="box-header" data-original-title="">
+                <h2><i class="halflings-icon white "></i><span class="break"></span>用户详情</h2>
+                <div class="box-icon">
+                    <a href="javascript:void(0)" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+                </div>
+            </div>
+            <div class="box-content">
+                <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label">昵称</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="nickname" disabled type="text" value="{$userInfo['nickname']}"/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">用户图片</label>
+                            <div class="controls">
+                                <div class="file-img">
+                                    <div>
+                                        <?php echo empty($userInfo["photo"]) ?  '<img src="__COMMON__/img/onload.png" alt="点击上传图片"' : "" ?>
+                                        <img src="{$userInfo['photo']}" class="img-circle" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label">用户编号</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="id_card" disabled type="text" value="{$userInfo['id_card']}"/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">电话</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="mobile" disabled type="text" value="{$userInfo['mobile']}"/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">邮箱</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="email" disabled type="text" value="{$userInfo['email']}" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">真实姓名</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="real_name" disabled type="text" value="{$userInfo['real_name']}" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">性别</label>
+                            <div class="controls">
+                                <select name="sex" disabled>
+                                    <option value="0" <?php echo $userInfo["sex"] == 0 ? "selected" : "" ?> >保密</option>
+                                    <option value="1" <?php echo $userInfo["sex"] == 1 ? "selected" : "" ?> >男</option>
+                                    <option value="2" <?php echo $userInfo["sex"] == 2 ? "selected" : "" ?> >女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">年龄</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="age" type="text" disabled value="{$userInfo['age']}" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">用户状态</label>
+                            <div class="controls">
+                                <select name="state" disabled>
+                                        <option value="1" <?php echo $userInfo["state"] == 1 ? "selected" : "" ?> >待审核</option>
+                                        <option value="2" <?php echo $userInfo["state"] == 2 ? "selected" : "" ?> >审核通过</option>
+                                        <option value="3" <?php echo $userInfo["state"] == 3 ? "selected" : "" ?> >审核不通过</option>
+                                        <option value="4" <?php echo $userInfo["state"] == 4 ? "selected" : "" ?> >禁用</option>
+                                        <option value="5" <?php echo $userInfo["state"] == 5 ? "selected" : "" ?> >没有上传身份</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">注册时间</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="addtime" disabled type="text" value="{$userInfo['addtime']|date='Y-m-d H:i:s',###}" />
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" onclick="modifyCancel()">返回</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 取消
+        function modifyCancel(){
+            $("#user-edit").html('');
+            $("#user-edit").css("display","none");
+            $("#user-list").css('display','block');
+        }
+    </script>
+</block>

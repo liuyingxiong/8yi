@@ -1,0 +1,98 @@
+<notempty name="monthList">
+    <!--  前三名 -->
+    <div class="save_top">
+        <div class="save_top_bg">
+            <div class="no2">
+                <div class="no2_img">
+                    <img src="__MOBILE__/img/huangguan2.png" class="huangguan1" alt="">
+                    <img src="<?php echo isset($monthList[1]['photo'])?(empty($monthList[1]['photo'])?'__COMMON__/img/default_head.jpg':$monthList[1]['photo']):'__COMMON__/img/rankingbg.png';?>" class="img2" alt="头像" />
+                    <img src="__MOBILE__/img/number2.png" class="number1" alt="">
+                </div>
+                <div class="no2_span">
+                    <p class="no2_name">{$monthList[1]['nickname'] ?? ""}</p>
+                    <p class="ysje"><?php echo isset($monthList[1]['s_save'])?"¥".$monthList[1]['s_save']:""; ?></p>
+                </div>
+            </div>
+            <div class="no1">
+                <div class="n1_bg"></div>
+                <div class="no1_img">
+                    <img src="__MOBILE__/img/huangguan1.png" class="huangguan1" alt="">
+                    <img src="__MOBILE__/img/sanjiao_l.png" class="sanjiao_l" alt="">
+                    <img src="__MOBILE__/img/sanjiao_r.png" class="sanjiao_r" alt="">
+                    <img src="<?php echo isset($monthList[0]['photo'])?(empty($monthList[0]['photo'])?'__COMMON__/img/default_head.jpg':$monthList[0]['photo']):'__COMMON__/img/rankingbg.png';?>" class="img2" alt="头像" />
+                    <img src="__MOBILE__/img/number1.png" class="number1" alt="">
+                </div>
+                <div class="no1_span">
+                    <p class="no1_name">{$monthList[0]['nickname'] ?? ""}</p>
+                    <p class="ysje"><?php echo isset($monthList[0]['s_save'])?"¥".$monthList[0]['s_save']:""; ?></p>
+                </div>
+            </div>
+            <div class="no3">
+                <div class="no3_img">
+                    <img src="__MOBILE__/img/huangguan3.png" class="huangguan1" alt="">
+                    <img src="<?php echo isset($monthList[2]['photo'])?(empty($monthList[2]['photo'])?'__COMMON__/img/default_head.jpg':$monthList[2]['photo']):'__COMMON__/img/rankingbg.png';?>" class="img2" alt="头像" />
+                    <img src="__MOBILE__/img/number3.png" class="number1" alt="">
+                </div>
+                <div class="no3_span">
+                    <p class="no3_name">{$monthList[2]['nickname'] ?? ""}</p>
+                    <p class="ysje"><?php echo isset($monthList[2]['s_save'])?"¥".$monthList[2]['s_save']:""; ?></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="save_list">
+        <!-- 自己 -->
+        <foreach name="$monthList" item="value" key="k_one">
+        <if condition="$value.uid eq $user.id">
+        <div class="save_me">
+            <div class="weui-cells">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <notempty name="$value['photo']">
+                            <img src="{$value['photo']}" alt="头像" width="40" height="40" />
+                        <else />
+                            <img src="__COMMON__/img/default_head.jpg" alt="头像" width="40" height="40" />
+                        </notempty>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <p>{$value.nickname}</p>
+                        <p>排名:{$k_one+1}</p>
+                    </div>
+                    <div class="weui-cell__ft">¥{$value.s_save}</div>
+                </div>
+            </div>
+        </div>
+        </if>
+        </foreach>
+        <!-- 其它 -->
+        <div class="save_list_other">
+            <div class="weui-cells">
+            <foreach name="$monthList" item="list" key="k">
+                <if condition="$k gt 2">
+                    <div class="weui-cell">
+                        <span class="num">{$k+1}</span>
+                        <div class="weui-cell__hd">
+                        <notempty name="$list['photo']">
+                            <img src="{$list['photo']}" alt="头像" />
+                        <else />
+                            <img src="__COMMON__/img/default_head.jpg" alt="头像" />
+                        </notempty>
+                        </div>
+                        <div class="weui-cell__bd">
+                            <p>{$list.nickname}</p>
+                        </div>
+                        <div class="weui-cell__ft">¥{$list.s_save}</div>
+                    </div>
+                </if>
+            </foreach>
+            </div>
+        </div>
+    </div>
+<else/>
+    <div class="page__bd">
+        <div class="weui-loadmore weui-loadmore_line">
+            <?php var_dump($monthList)?>
+            <span class="weui-loadmore__tips">暂无数据</span>
+        </div>
+    </div>
+</notempty>

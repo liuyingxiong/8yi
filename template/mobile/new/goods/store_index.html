@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>邻居联盟</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+    <meta name="viewport"   content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="__MOBILE__/css/weui.css">
+    <link rel="stylesheet" href="__MOBILE__/css/reset.css">
+    <link rel="stylesheet" href="__MOBILE__/css/store_index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/css/swiper.css">
+    <style>
+        .zjlist_r{ line-height: 0.35rem;}
+        .swiper-container-horizontal > .swiper-pagination-bullets{
+            bottom: 0;
+        }
+        .store-index-new-menu-div{
+            margin: 0 auto;
+            overflow: hidden;
+            list-style: none;
+            padding: 0;
+            z-index: 1;
+        }
+        .store-index-new-menu-subscript{
+            text-align: center;
+        }
+        .store-index-new-menu-subscript-span{
+            width: 8px;
+            height: 8px;
+            display: inline-block;
+            border-radius: 100%;
+            background: #000;
+            opacity: 0.2;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            vertical-align: baseline;
+        }
+        .store-index-new-menu-subscript-span-show{
+            opacity: 1;
+            background: #007aff;
+        }
+        .linlixinyuan{
+            position: relative;
+        }
+        .jiaobiao{
+            position: absolute;
+            left: 0.9rem;
+            top: -0.05rem;
+            width: 0.3rem;
+            height: 0.3rem;
+            line-height: 0.3rem;
+            font-size: 0.24rem;
+            border-radius:100%;
+            background: red;
+            color: #fff;
+            padding: 0.03rem;
+        }
+    </style>
+</head>
+<body>
+<div class="store_body">
+    <!-- 头部导航 -->
+    <div class="store_nav">
+        <a href="{:url('Index/index')}"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+        <span>便利店</span>
+    </div>
+
+    <!-- 搜索条 -->
+    <div class="page__bd" style="padding-top: 10px">
+        <!--<div class="weui-search-bar" id="searchBar">
+            <form class="weui-search-bar__form">
+                <div class="weui-search-bar__box">
+                    <i class="weui-icon-search"></i>
+                    <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+                    <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+                </div>
+                <label class="weui-search-bar__label" id="searchText" style="transform-origin: 0 0 0; opacity: 1; transform: scale(1, 1);">
+                    <i class="weui-icon-search"></i>
+                    <span>搜索</span>
+                </label>
+            </form>
+            <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+        </div>
+        <div class="weui-cells searchbar-result" id="searchResult" style="transform-origin: 0 0 0; opacity: 1; transform: scale(1, 1); display: none;">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>实时搜索文本</p>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>实时搜索文本</p>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>实时搜索文本</p>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>实时搜索文本</p>
+                </div>
+            </div>
+        </div>-->
+    </div>
+
+    <!-- 轮播图 -->
+    <div class="banner">
+        <img src="__MOBILE__/img/banner_new.png" alt="轮播图">
+    </div>
+    <div class="store_tit_list">
+        <span>更快捷 更省钱</span>
+    </div>
+    <div class="store_affirm">
+        <span>正品保障</span>
+        <span>15分钟内送达</span>
+        <span>全场包邮</span>
+    </div>
+    <!-- 二级分类 -->
+    <div class="swiper-container swiper-container-horizontal" id="swiper-container1">
+        <div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(-1600px, 0px, 0px);">
+            <?php
+            for($i=0; $i<$number; $i++){
+           ?>
+                <div class="swiper-slide">
+                    <div class="ico_list">
+                        <?php
+                        $menu_sta = $i*10;
+                        if($i == ($number-1)){
+                            $menu_end = $menu_count;
+                        }else{
+                            $menu_end = ($i+1)*10;
+                        }
+                        for($k=$menu_sta; $k<$menu_end; $k++){
+                            if($menu[$k]['mobile_name'] == "邻里心愿"){
+                     ?>
+                        <a href="{$menu[$k]['mobile_url']}" onclick="hehe({$menu[$k]['index']})" <if condition="$com_number gt 0">class="linlixinyuan"</if> >
+                            <if condition="$com_number gt 0"><span class="jiaobiao">{$com_number}</span></if>
+                            <img src="{$menu[$k]['image']}" alt="">
+                            <p>{$menu[$k]['mobile_name']}</p>
+                        </a>
+                        <?php }else{ ?>
+                        <a href="{$menu[$k]['mobile_url']}" onclick="hehe({$menu[$k]['index']})">
+                            <img src="{$menu[$k]['image']}" alt="">
+                            <p>{$menu[$k]['mobile_name']}</p>
+                        </a>
+                        <?php }} ?>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+    <!-- 排行榜 -->
+    <div class="store_tit_list">
+        <span>互动,好玩又有礼</span>
+    </div>
+    <div class="store_save_list">
+        <div class="save_top">
+            <div class="save_top_bg">
+                <div class="no2">
+                    <a href="{:url('Index/saveList')}">
+                        <div class="no2_img">
+                            <img src="__MOBILE__/svg/huangguan2.svg" class="huangguan1" alt="">
+                            <notempty name="$rankingUser[1]">
+                                <notempty name="$rankingUser[1]['photo']">
+                                    <img src="{$rankingUser[1]['photo']}" class="img2" alt="头像" />
+                                <else />
+                                    <img src="__COMMON__/img/default_head.jpg" class="img2" alt="头像" />
+                                </notempty>
+                            <else />
+                                <img src="__COMMON__/img/rankingbg.png" class="img2" alt="头像" />
+                            </notempty>
+                            <img src="__MOBILE__/svg/number2.svg" class="number1" alt="">
+                        </div>
+                    </a>
+                    <div class="no2_span">
+                        <p class="no2_name"><notempty name="$rankingUser[1]">{$rankingUser[1]['nickname']}</notempty></p>
+                        <p class="ysje"><notempty name="$rankingUser[1]">¥{$rankingUser[1]['s_save']}</notempty></p>
+                    </div>
+                </div>
+                <div class="no1">
+                    <div class="n1_bg"></div>
+                    <a href="{:url('Index/saveList')}">
+                        <div class="no1_img">
+                            <img src="__MOBILE__/svg/huangguan1.svg" class="huangguan1" alt="">
+                            <img src="__MOBILE__/svg/sanjiao_l.svg" class="sanjiao_l" alt="">
+                            <img src="__MOBILE__/svg/sanjiao_r.svg" class="sanjiao_r" alt="">
+                            <notempty name="$rankingUser[0]">
+                                <notempty name="$rankingUser[0]['photo']">
+                                    <img src="{$rankingUser[0]['photo']}" class="img1" alt="头像" />
+                                    <else />
+                                    <img src="__COMMON__/img/default_head.jpg" class="img1" alt="头像" />
+                                </notempty>
+                                <else />
+                                <img src="__COMMON__/img/rankingbg.png" class="img1" alt="头像" />
+                            </notempty>
+                            <img src="__MOBILE__/svg/number1.svg" class="number1" alt="">
+                        </div>
+                    </a>
+                    <div class="no1_span">
+                        <p class="no1_name"><notempty name="$rankingUser[0]">{$rankingUser[0]['nickname']}</notempty></p>
+                        <p class="ysje"><notempty name="$rankingUser[0]">¥{$rankingUser[0]['s_save']}</notempty></p>
+                    </div>
+                </div>
+                <div class="no3">
+                    <a href="{:url('Index/saveList')}">
+                        <div class="no3_img">
+                            <img src="__MOBILE__/svg/huangguan3.svg" class="huangguan1" alt="">
+                            <notempty name="$rankingUser[2]">
+                                <notempty name="$rankingUser[2]['photo']">
+                                    <img src="{$rankingUser[2]['photo']}" class="img3" alt="头像" />
+                                    <else />
+                                    <img src="__COMMON__/img/default_head.jpg" class="img3" alt="头像" />
+                                </notempty>
+                                <else />
+                                <img src="__COMMON__/img/rankingbg.png" class="img3" alt="头像" />
+                            </notempty>
+                            <img src="__MOBILE__/svg/number3.svg" class="number1" alt="">
+                        </div>
+                    </a>
+                    <div class="no3_span">
+                        <p class="no3_name"><notempty name="$rankingUser[2]">{$rankingUser[2]['nickname']}</notempty></p>
+                        <p class="ysje"><notempty name="$rankingUser[2]">¥{$rankingUser[2]['s_save']}</notempty></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="save_list_btn">
+            <a class="bt1" href="{:url('Activity/prize_list_2')}"><img src="__MOBILE__/img/bt2.png" alt=""></a>
+            <a class="bt2" href="{:url('Activity/prize_list_3')}"><img src="__MOBILE__/img/bt1.png" alt=""></a>
+        </div>
+        <ul class="zjlist_ul">
+            <li>
+                <p class="zjlist_l">
+                    <img src="<?php echo empty($order['photo'])?'__COMMON__/img/default_head.jpg':$order['photo']; ?>" alt="">
+                    <span><notempty name="$order.nickname">{$order.nickname}<else />匿名</notempty></span>
+                </p>
+                <p class="zjlist_r">刚刚在便利店消费<span class="zjlist_price">&nbsp;￥{$order.total}&nbsp;</span>省下<span class="zjlist_price">&nbsp;￥{$order.save}&nbsp;</span></p>
+            </li>
+        </ul>
+    </div>
+
+    <notempty name="act_goods">
+        <div class="store_tit_list">
+            <span>畅饮世界杯</span>
+        </div>
+        <ul class="activity_list">
+            <foreach name="act_goods" item="list">
+                <li>
+                    <img src="{$list.img}" alt="">
+                    <!--<a href="{:url('Order/on_order',['act_goods_id'=>$list['act_goods_id']])}" class="activity_list_btn btn1"></a>-->
+                    <input type="button" name="ljqg" class="activity_list_btn btn1" onclick="goumaitaocan({$list['act_goods_id']})"/>
+                </li>
+                <!--<li>
+                    <img src="__MOBILE__/img/activity_2.png" alt="">
+                    <input type="button" name="ljqg" class="activity_list_btn btn2" />
+                </li>
+                <li>
+                    <img src="__MOBILE__/img/activity_3.png" alt="">
+                    <input type="button" name="ljqg" class="activity_list_btn btn3" />
+                </li>-->
+            </foreach>
+        </ul>
+    </notempty>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/js/swiper.js"></script>
+<script src="__MOBILE__/js/rem.js"></script>
+<include file="public:layer" />
+<script>
+    $('.activity_list_btn').eq(0).css('right','0.5rem').css('top','2.7rem');
+    $('.activity_list_btn').eq(1).css('left','0.5rem').css('top','2.5rem');
+    $('.activity_list_btn').eq(2).css('right','0.5rem').css('top','2.5rem');
+    var mySwiper = new Swiper('.swiper-container',{
+        freeMode : false,
+        pagination: {
+            el: '.swiper-pagination',
+        },
+    })
+    function hehe(i) {
+        sessionStorage.setItem('val',i);
+    };
+
+    // 活动套餐购买
+    function goumaitaocan(act_goods_id){
+        load();
+        $.ajax({
+            type : 'post',
+            url : "{:url('Order/on_order_meal')}",
+            data :{act_goods_id:act_goods_id},
+            dataType : 'json',
+            success : function(ret){
+                layer.closeAll();
+                if(ret.ret == 1){
+                    var url = "{:url('Order/pays')}";
+                    url = url.replace(".html","");
+                    window.location.href=url+'/order_sn/'+ret.code;
+                }else{
+                    layer.alert(ret.msg, {icon: 2,time:2000});
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>

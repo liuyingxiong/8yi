@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <include file="public:head" title="邻居联盟"/>
+</head>
+<body class="body save">
+<div class="top_style">
+    <a href="Javascript:history.back()" class="left"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+    <span class="center">已省金额</span>
+</div>
+<div class="save_bg">
+    <div class="save_bg_p">
+        <p>总盈利</p>
+        <p>¥{$total_save}</p>
+    </div>
+</div>
+<div class="weui-cells save_list">
+    <notempty name="$order">
+        <foreach name="$order" item="list">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p class="ddbh">订单编号:{$list.order_sn}</p>
+                <p class="ddsj">{$list.addtime|date="Y-m-d H:i",###}</p>
+            </div>
+            <div class="weui-cell__ft">¥{$list.save}</div>
+        </div>
+        </foreach>
+    <else />
+        <div class="page__bd">
+            <div class="weui-loadmore weui-loadmore_line">
+                <span class="weui-loadmore__tips">暂无数据</span>
+            </div>
+        </div>
+    </notempty>
+</div>
+</body>
+</html>

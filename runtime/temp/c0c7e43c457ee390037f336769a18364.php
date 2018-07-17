@@ -1,0 +1,199 @@
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:70:"E:\stuby\PHPTutorial\WWW\8yi/application/admin\view\goods\addcate.html";i:1531714046;}*/ ?>
+
+    <style>
+        .controls div{
+            float: left;
+            width: 10%;
+        }
+        .controls div label{
+            float: left;
+            margin: 0;
+            padding: 0;
+            height: 30px;
+            line-height: 30px;
+            width: 30%;
+        }
+        .controls div input{
+            float: left;
+            margin: 0;
+            padding: 0;
+            height: 30px;
+            line-height: 30px;
+            position: relative;
+            top: 1px;
+        }
+        .controls .file-img{
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+        .controls .file-img input{
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            left: 0;
+            opacity: 0;
+        }
+        .controls .file-img div{
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <div class="row-fluid sortable ui-sortable">
+        <div class="box span12">
+            <div class="box-header" data-original-title="">
+                <h2><i class="halflings-icon white "></i><span class="break"></span>添加分类</h2>
+                <div class="box-icon">
+                    <a href="javascript:void(0)" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
+                </div>
+            </div>
+            <div class="box-content">
+                <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label">分类名称-电脑端显示</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="name" type="text" value=""/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">电脑端显示图片</label>
+                            <div class="controls">
+                                <div class="file-img">
+                                    <input type="file" onchange="preview(this,'pc_image')" id="pc_image"/>
+                                    <div>
+                                        <img src="/public/static/common/img/onload.png" alt="点击上传图片" />
+                                    </div>
+                                </div>
+                                <input type="hidden" name="pc_image" readonly="readonly" value=""/>
+                                <!--<input class="input-xlarge focused" name="original_img" type="text" value=""/>-->
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">分类名称-手机端显示</label>
+                            <div class="controls">
+                                <input class="input-xlarge focused" name="mobile_name" type="text" value=""/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">手机端显示图片</label>
+                            <div class="controls">
+                                <div class="file-img">
+                                    <input type="file" onchange="preview(this,'image')" id="image"/>
+                                    <div>
+                                        <img src="/public/static/common/img/onload.png" alt="点击上传图片" />
+                                    </div>
+                                </div>
+                                <input type="hidden" name="image" readonly="readonly" value=""/>
+                                <!--<input class="input-xlarge focused" name="original_img" type="text" value=""/>-->
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">所属类别</label>
+                            <div class="controls">
+                                <select name="parent_id" style="outline: none; line-height: 20px;">
+                                    <option value="0">首类</option>
+                                    <?php if(is_array($cateList) || $cateList instanceof \think\Collection || $cateList instanceof \think\Paginator): if( count($cateList)==0 ) : echo "" ;else: foreach($cateList as $key=>$list): ?>
+                                        <option value="<?php echo $list['id']; ?>">
+                                            <?php echo $list['level']; ?>级：<?php echo $list['name']; ?>
+                                        </option>
+                                    <?php endforeach; endif; else: echo "" ;endif; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">排列顺序</label>
+                            <div class="controls">
+                                <input type="text" name="sort_order" onpaste="return false" ondragenter="return false" value="50" class="input-xlarge focused" data-field="sort_order" data-value="50" data-id="1" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">是否显示</label>
+                            <div class="controls">
+                                <div>
+                                    <label for="yes">是</label>
+                                    <input name="is_show" id="yes" type="radio" value="1" checked="checked"/>
+                                </div>
+                                <div>
+                                    <label for="no">否</label>
+                                    <input name="is_show" id="no" type="radio" value="0"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" onclick="addCate()">添加</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 添加
+        function addCate() {
+            var name = $("input[name='name']").val(),
+                mobile_name = $("input[name='mobile_name']").val();
+            if($.trim(name).length <= 0 || $.trim(mobile_name).length <= 0){
+                layer.msg('分类名称不能为空',{icon:2,time:2000});
+                return false;
+            }
+            load();
+            $.ajax({
+                type : 'post',
+                url : "<?php echo url('Goods/addCateFun'); ?>",
+                data : $(".form-horizontal").serialize(),
+                dataType : 'json',
+                success : function(ret){
+                    console.log(ret);
+                    layer.closeAll();
+                    if(ret.ret === 1){
+                        layer.msg(ret.msg,{icon:1,time:1000});
+                        setTimeout(function(){
+                            ajaxUrl("Goods/addcate");
+                        },1000);
+                    }else{
+                        layer.msg(ret.msg,{icon:2,time:3000});
+                    }
+                }
+            })
+        }
+
+        // 上传图片时显示功能
+        function preview(file,id){
+            var original_img = $("#"+id);
+            var img = original_img.next("div").find("img");
+            var old_width = img.css("width");
+            var old_height = img.css("height");
+            if(file.files && file.files[0]){
+                var fileImg = file.files[0];
+                if(window.FileReader) {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(fileImg);
+                    reader.onload = function (e) {
+                        base64Code = this.result;
+                        img.attr("src",base64Code);
+                        $("input[name='"+id+"']").val(base64Code);
+                        var img_width = img.css("width");
+                        var img_height = img.css("height");
+                        if((img_width*1-old_width*1) > (img_height*1-old_height*1)){
+                            img.css({
+                                "width":"100%",
+                                "height":"auto"
+                            })
+                        }else{
+                            img.css({
+                                "height":"100%",
+                                "width":"auto"
+                            })
+                        }
+                    }
+                }else{
+                    layer.msg('浏览器不支持base64上传功能,请更新为最新的浏览器',{icon:2,time:2000});
+                    original_img.val("");
+                    img.attr("src","/public/static/common/img/onload.png");
+                }
+            }
+        }
+    </script>

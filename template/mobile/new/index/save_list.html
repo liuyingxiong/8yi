@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>邻居联盟</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+    <meta name="viewport"   content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="__MOBILE__/css/weui.css">
+    <link rel="stylesheet" href="__MOBILE__/css/reset.css">
+    <link rel="stylesheet" href="__MOBILE__/css/save.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/css/swiper.css">
+    <style>
+        .guize{
+            position: fixed;
+            bottom: 1.5rem;
+            left: 0.1rem;
+            z-index: 999;
+        }
+        .guize img{
+            width: 0.8rem;
+        }
+        .weui-dialog__bd p{
+            text-align: left;
+        }
+        .dialog_p{
+            color: red;
+        }
+        .num{
+            width: 0.4rem;
+            text-align: center;
+        }
+        .tabs{
+            font-size: 0.32rem;
+            display: flex;
+            background: #e49bb0;
+            color: #fff;
+        }
+        #tabs-container{
+            font-size: 0.24rem;
+        }
+        .tabs span{
+            flex: 1;
+            height: 0.8rem;
+            line-height: 0.8rem;
+            text-align: center;
+            border-radius: 0;
+            background: none;
+            opacity:1;
+            outline: none;
+        }
+        .swiper-pagination-bullet-active{
+            border-bottom: 2px solid #fff;
+        }
+        #historyMonth{
+            display: none;
+        }
+    </style>
+</head>
+<div class="guize"><img src="__MOBILE__/img/guize.png" alt=""></div>
+<body style="background: #f3f3f3">
+<div class="save_body">
+    <div class="save_nav">
+        <a href="Javascript:history.back()" class="save_nav_l"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+        <!--<span>邻里排行</span>-->
+        <span id="bar">本月排行榜</span>
+        <a href="Javascript:;" class="save_nav_r"><img src="__MOBILE__/svg/more.svg" alt=""></a>
+        <include file="public:top_right_menu" />
+    </div>
+</div>
+<div id="tabs-container" class="swiper-container swiper-container-horizontal">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide swiper-slide-active">
+            <include file="index:monthranking"  />
+        </div>
+        <div class="swiper-slide swiper-slide-next">
+            <include file="index:hismonthranking"  />
+        </div>
+    </div>
+</div>
+<script src="__MOBILE__/js/rem.js"></script>
+<script src="__MOBILE__/js/weui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.3/js/swiper.js"></script>
+<script src="http://apps.bdimg.com/libs/jquery/1.8.0/jquery.js"></script>
+<script>
+    var mySwiper = new Swiper('.swiper-container',{
+        pagination :{
+            // type: 'custom',
+            el: '.tabs',
+            clickable :true
+        },
+        on:{
+            slideChangeTransitionStart: function(){
+                console.log(this.activeIndex);
+                var bar = $("#bar");
+                if(this.activeIndex === 0){
+                    bar.html("本月排行榜")
+                }else if(this.activeIndex === 1){
+                    bar.html("上月排行榜")
+                }
+            },
+        },
+    });
+//    var tabs = document.getElementsByClassName('tabs')[0];
+//    var ospan = tabs.getElementsByTagName('span');
+//    ospan[0].innerHTML = '上月排行榜';
+//    ospan[1].innerHTML = '本月排行榜';
+
+
+    var guize = document.getElementsByClassName('guize')[0];
+    var otxt = '<p class="dialog_p">'+'活动时间：'+'</p>'
+        +'<p>'+'2018年7月1日—2018年7月31日'+'</p>'
+        +'<p class="dialog_p">'+'活动内容：'+'</p>'
+        +'<p>'+'客户在本店消费后，在活动时间内省钱数量累计排行' +
+        '的前三名，可获得相应奖励，月月开奖，月月更新。'+'</p>'
+        +'<p class="dialog_p">'+'活动细则:'+'</p>'
+        +'<p>'+'2018年7月31日后，客户可在便利店首页的互动板块中点' +
+        '击获奖名单查看获奖详情。'+'</p>';
+    guize.onclick = function(){
+    weui.alert(otxt);
+        var obtn = document.getElementsByClassName('weui-dialog__btn')[0];
+        obtn.innerHTML = '知道了';
+    };
+    var obtn_r = document.getElementsByClassName('save_nav_r')[0];
+    var omenu = document.getElementsByClassName('save_menu')[0];
+    obtn_r.onclick = function () {
+        if(omenu.style.display=='none'){
+            omenu.style.display='block';
+        }else{
+            omenu.style.display='none';
+        }
+    };
+</script>
+</body>
+</html>

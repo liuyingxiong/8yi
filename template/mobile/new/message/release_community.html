@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>邻居联盟</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+    <meta name="viewport"   content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="__MOBILE__/css/weui.css">
+    <link rel="stylesheet" href="__MOBILE__/css/reset.css">
+    <link rel="stylesheet" href="__MOBILE__/css/tucao.css">
+</head>
+<body>
+<div class="rel_tc_body">
+    <div class="tucao_nav">
+        <a href="Javascript:history.back()" class="tucao_nav_l"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+        <span>我要吐槽</span>
+    </div>
+    <form action="{:url('Message/communityAdd')}" class="tc_form" method="post" enctype="multipart/form-data">
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea id="weui-textarea" class="weui-textarea" name="subject_txt" placeholder="请输入文本" rows="3"></textarea>
+                    <div class="weui-textarea-counter"><span id="font_num">0</span>/50</div>
+                </div>
+            </div>
+        </div>
+        <div class="weui-gallery" id="gallery">
+            <span class="weui-gallery__img" id="galleryImg"></span>
+            <div class="weui-gallery__opr">
+                <a href="javascript:" rel="external nofollow" class="weui-gallery__del">
+                    <i class="weui-icon-delete weui-icon_gallery-delete"></i>
+                </a>
+            </div>
+        </div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__hd">
+                            <p class="weui-uploader__title">图片上传</p>
+                            <div class="weui-uploader__info">0/3</div>
+                        </div>
+                        <div class="weui-uploader__bd">
+                            <ul class="weui-uploader__files" id="uploaderFiles"></ul>
+                            <div class="weui-uploader__input-box">
+                                <input id="uploaderInput" class="weui-uploader__input zjxfjs_file" type="file" accept="image/*" multiple="" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fb">
+            <input type="button" value="发布" class="button" />
+        </div>
+    </form>
+</body>
+<script src="__MOBILE__/js/rem.js"></script>
+<include file="public:layer" />
+<script type="text/javascript">
+    $(function() {
+        $("#weui-textarea").keyup(function(){
+            var a = $(this).val().length;
+            $('#font_num').html(a);
+            if(a >50){
+                var num=$("#weui-textarea").val().substr(0,50);
+                $("#weui-textarea").val(num);
+                $('#font_num').html(50);
+                layer.msg("不能超过50个字",{time:2000});
+            }
+        });
+        var $gallery = $("#gallery"),
+            $galleryImg = $("#galleryImg"),
+            $uploaderInput = $("#uploaderInput"),
+            $uploaderFiles = $("#uploaderFiles");
+
+        $uploaderInput.on("change", function(e) {
+            if($(".weui-uploader__file").length==3){
+                layer.msg("图片不能超过三张",{time:2000});
+            }else{
+                var src, url = window.URL || window.webkitURL || window.mozURL,
+                    files = e.target.files;
+                if(files.length <= 0){
+                    layer.msg("请选择图片",{time:2000});
+                }else if(files.length > 3 || (files.length*1 + $(".weui-uploader__file").length*1) > 3){
+                    layer.msg("图片不能超过三张",{time:2000});
+                }else{
+                    for(var i = 0, len = files.length; i < len; ++i) {
+                        if(files && files[i]) {
+                            var fileImg = files[i];
+                            if (window.FileReader) {
+                                var reader = new FileReader();
+                                reader.readAsDataURL(fileImg);
+                                reader.onload = function (e) {
+                                    base64Code = this.result;
+                                    var tmpl = '<li class="weui-uploader__file" style="background-image:url('+base64Code+')">' +
+                                        '<input name="com_imgs[]" value="'+base64Code+'" type="hidden" style="opacity: 0"/></li>';
+                                    $uploaderFiles.append(tmpl);
+                                    $('.weui-uploader__info').eq(0).html($('.weui-uploader__file').length+'/3');
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        var index; //第几张图片
+        $uploaderFiles.on("click", "li", function() {
+            index = $(this).index();
+            $galleryImg.attr("style", this.getAttribute("style"));
+            $gallery.fadeIn(100);
+        });
+        $gallery.on("click", function() {
+            $gallery.fadeOut(100);
+        });
+        //删除图片 删除图片的代码也贴出来。x
+        $(".weui-gallery__del").click(function() { //这部分刚才放错地方了，放到$(function(){})外面去了
+            // console.log('删除');
+            $uploaderFiles.find("li").eq(index).remove();
+        });
+
+        // 确认发布
+        $(".button").click(function () {
+            var subject_txt = $("textarea[name='subject_txt']").val();
+            if($.trim(subject_txt).length <= 0){
+                layer.msg('请输入文本信息');
+                return false;
+            }
+            layer.load(1,{shade: [0.7, '#393D49']}, {shadeClose: true});
+            $(".tc_form").submit();
+        })
+    })
+</script>
+</html>

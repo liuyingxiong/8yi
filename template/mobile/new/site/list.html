@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <include file="public:head" title="邻居联盟"/>
+    <style>
+        .weui-cell__ft{
+            width: 30px;
+            padding: 0 0 0 0 !important;
+        }
+        .weui-cell__ft input{
+            float: left;
+        }
+        .weui-cell__ft span{
+            float: left;
+        }
+        .weui-cell__modify{
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+        }
+        .weui-cell__modify img{
+            width: 100%;
+        }
+        .opt_address_btn{
+            z-index: 9999;
+        }
+        .opt_address_list{
+            margin-bottom: 70px;
+        }
+        .weui-btn_primary:not(.weui-btn_disabled):active{
+            background: #d05f80;
+        }
+    </style>
+</head>
+<body id="opt_address_list_body">
+<div class="top_style">
+    <a href="Javascript:history.back()" class="left"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+    <span class="center">{$title}</span>
+</div>
+<div class="opt_address_list">
+    <div class="weui-cells weui-cells_radio">
+        <foreach name="$site" item="list">
+            <label class="weui-cell weui-check__label" for="{$list.id}">
+                <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" name="radio1" id="{$list.id}" <if condition="$list.default eq 1">checked="checked"</if>>
+                    <span class="weui-icon-checked"></span>
+                </div>
+                <div class="weui-cell__bd">
+                    <p class="my_address">我的收货地址</p>
+                    <p class="address_info">{$list.province}{$list.city}{$list.county}{$list.street}{$list.community}{$list.tower}{$list.unit}{$list.floor}</p>
+                    <p class="user_tel">{$list.receiver}&nbsp;&nbsp;&nbsp;{$list.phone}</p>
+                </div>
+                <a href="{:url('Site/addsite',['title'=>'编辑地址','site_id'=>$list['id']])}" class="weui-cell__modify">
+                    <img src="__MOBILE__/svg/edit.svg" alt="" />
+                </a>
+            </label>
+        </foreach>
+    </div>
+</div>
+
+<div class="weui-btn-area opt_address_btn">
+    <a href="{:url('Site/addsite')}" class="weui-btn weui-btn_primary">新建地址</a>
+</div>
+</body>
+<include file="public:layer" />
+<script type="text/javascript" src="__COMMON__/js/style.js"></script>
+<script>
+    $(function () {
+        // 切换默认收货地址
+        $(".weui-cell__bd").click(function () {
+            var id = $(this).parent().attr("for");
+            var getId = "{$getId}";
+            if(id >= 1){
+                $.ajax({
+                    type : 'post',
+                    url : "{:url('Site/ajaxdefa')}",
+                    data : {id:id},
+                    dataType : 'json',
+                    success : function(ret){
+                        console.log(ret);
+                        if(ret.ret == 1){
+                            if(getId >= 1){
+                                window.history.go(-1);
+                            }else{
+                                msgErr(ret.msg,1,2000);
+                            }
+                        }else{
+                            msgErr(ret.msg,2,3000);
+                        }
+                    }
+                })
+            }
+        })
+    })
+</script>
+</html>

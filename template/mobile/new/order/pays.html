@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <include file="public:head" title="邻居联盟"/>
+    <style>
+        .pays_bottom{
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+            z-index: 999;
+            background: #fff;
+        }
+    </style>
+</head>
+<body class="body">
+<div class="top_style">
+    <a href="{$leftUrl}" class="left"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+    <span class="center">订单详情</span>
+</div>
+<div class="order_info">
+    <span class="order_id">订单编号:{$orderGoods[0]['order_sn']}</span>
+    <!--<span class="order_zt">待支付</span>-->
+</div>
+
+<div class="weui-cells order_address">
+    <a class="weui-cell weui-cell_access" href="javascript:;" style="padding: 10px;">
+        <img src="__MOBILE__/svg/dingwei.svg" alt="" width="30px">
+        <div class="weui-cell__bd">
+            <p>{$orderGoods[0]['address']}</p>
+            <p><span style="margin-right: 15px">{$orderGoods[0]['people']}</span><span>{$orderGoods[0]['phone']|substr_replace='****',3,4}</span></p>
+        </div>
+    </a>
+</div>
+<!--<div class="weui-cells order_list_dzf">
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <p>邻居联盟小店</p>
+        </div>
+        <div class="weui-cell__ft">联系门店</div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <p>预约配送</p>
+        </div>
+        <div class="weui-cell__ft">2018-06-11 16：50-17:20</div>
+    </div>
+</div>-->
+<ul class="weui-cells order_goods_list">
+    <foreach name="$orderGoods" item="list">
+    <li class="weui-cell">
+        <div class="weui-cell__hd order_goods_pic"><img src="{$list.thumbnail_img}"></div>
+        <div class="weui-cell__bd order_goods_list_r">
+            <p class="order_goods_name">{$list.goods_name}</p>
+
+            <p class="order_dj">￥ {$list.shop_price}</p>
+            <div>
+                <p class="order_goods_num">&nbsp;X {$list.number}</p>
+                <p class="order_xj">小计：￥<php>echo $list['shop_price'] * $list['number'];</php> </p>
+            </div>
+        </div>
+    </li>
+    </foreach>
+</ul>
+
+<div class="weui-cells">
+    <div class="weui-cell" style="margin-bottom:2rem;">
+        <div class="weui-cell__bd order_info_time">
+            <div>
+                <span class="sfje">订单状态：</span>
+                <span class="rig">
+                    <switch name="$orderGoods[0]['order_state']">
+                        <case value="1">已完成</case>
+                        <case value="2">已取消</case>
+                        <default />未完成
+                    </switch>
+                </span>
+            </div>
+            <div>
+                <span class="sfje">付款状态：</span>
+                <span class="rig">
+                    <switch name="$orderGoods[0]['payment_state']">
+                        <case value="1">已付款</case>
+                        <default />未付款
+                    </switch>
+                </span>
+            </div>
+            <div>
+                <span class="sfje">送货状态：</span>
+                <span class="rig">
+                    <switch name="$orderGoods[0]['delivery_state']">
+                        <case value="1">等待出货</case>
+                        <case value="2">正在送货</case>
+                        <case value="3">完成签收</case>
+                        <default />等待付款
+                    </switch>
+                </span>
+            </div>
+            <div><span>下单时间</span><span class="rig">{$orderGoods[0]['addtime']|date="Y-m-d H:i:s",###}</span></div>
+            <div><span>到货时间</span><span class="rig"><notempty name="$orderGoods[0]['arrivaltime']">{$orderGoods[0]['arrivaltime']|date="Y-m-d H:i:s",###}</notempty></span></div>
+        </div>
+    </div>
+</div>
+<div class="pays_bottom">
+    <div class="weui-cells">
+        <div class="weui-cell">
+            <div class="weui-cell__bd order_info_time">
+                <!--<div><span>下单时间</span><span class="rig">{$orderGoods[0]['addtime']|date="Y-m-d H:i:s",###}</span></div>-->
+                <!--<div><span>商品金额</span><span class="rig">￥ {$orderGoods[0]['total']}</span></div>-->
+                <!--<div><span>配送运费</span><span class="rig">￥ 0</span></div>-->
+                <div><span>配送运费</span><span class="rig">免运费</span></div>
+                <div><span class="sfje">订单金额：</span><span class="rig">(已省￥{$orderGoods[0]['save']})<span class="sfje_num">￥{$orderGoods[0]['total']}</span></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="order_detail_btn">
+        <if condition="$orderGoods[0]['payment_state'] eq 0 and $orderGoods[0]['order_state'] eq 0 and $orderGoods[0]['delivery_state'] eq 0">
+            <a href="javascript:;" class="qxdd weui-btn weui-btn_mini weui-btn_default" id="delOrder">取消订单</a>
+            <a href="javascript:;" class="ljzf weui-btn weui-btn_mini" id="cashONde">货到付款</a>
+            <notempty name="isweixin">
+                <a href="javascript:;" class="ljzf weui-btn weui-btn_mini" id="payOrder">立即支付</a>
+            </notempty>
+        </if>
+        <input type="hidden" value="{$orderGoods[0]['order_sn']}" name="order_sn" />
+    </div>
+</div>
+</body>
+<include file="public:layer" />
+<notempty name="isweixin">
+    <include file="public:wxjssdk" />
+</notempty>
+<script>
+    // 取消订单
+    $("#delOrder").click(function () {
+        var order_sn = $("input[name='order_sn']").val();
+        load();
+        $.ajax({
+            type : 'post',
+            url : "{:url('Order/delOrder')}",
+            data : {order_sn:order_sn},
+            dataType : 'json',
+            success : function(ret){
+                layer.closeAll();
+                console.log(ret);
+                if(ret.ret == 1){
+                    window.location.href="{:url('User/myorder')}";
+                }else{
+                    layer.alert(ret.msg, {icon: 2,time:2000});
+                }
+            }
+        })
+    })
+    
+    // 货到付款
+    $("#cashONde").click(function () {
+        var order_sn = $("input[name='order_sn']").val();
+        load();
+        $.ajax({
+            type : 'post',
+            url : "{:url('Order/cashonde')}",
+            data : {order_sn:order_sn},
+            dataType : 'json',
+            success : function(ret){
+                layer.closeAll();
+                console.log(ret);
+                if(ret.ret == 1){
+                    var url = "{:url('Order/pay')}";
+                    url = url.replace(".html","");
+                    window.location.href=url+'/order_sn/'+order_sn;
+                }else{
+                    layer.alert(ret.msg, {icon: 2,time:2000});
+                }
+            }
+        })
+    })
+</script>
+</html>

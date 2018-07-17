@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <include file="public:head" title="邻居联盟"/>
+</head>
+<body id="opt_address_body">
+    <div class="top_style">
+        <a href="Javascript:history.back()" class="left"><img src="__MOBILE__/svg/left.svg" alt=""></a>
+        <span class="center">购物车</span>
+    </div>
+    <div class="weui-cells shop_address">
+        <a class="weui-cell weui-cell_access" href="javascript:;">
+            <div class="weui-cell__bd">
+                <p>融汇半岛江上公馆5栋11楼6号</p>
+                <p><span>朱先生</span><span>189****8779</span></p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+    <div class="shop_car_cont">
+        <div class="weui-cells weui-cells_checkbox">
+            <ul>
+                <li class="shop_car_item">
+                    <label class="weui-cell weui-check__label" for="s11">
+                        <div class="weui-cell__hd">
+                            <input type="checkbox" class="weui-check" name="checkbox1" id="s11" checked="checked">
+                            <i class="weui-icon-checked"></i>
+                        </div>
+                        <div class="weui-cell__bd shop_car_list">
+                            <ul>
+                                <li>
+                                    <div class="goods_pic"><img src="" alt=""></div>
+                                    <div class="goods_info">
+                                        <p class="goods_tit">农夫山泉</p>
+                                        <ul class="goods_other">
+                                            <li>永辉超市2.8</li>
+                                            <li>永辉超市2.8</li>
+                                            <li>永辉超市2.8</li>
+                                        </ul>
+                                        <p class="price_dj">
+                                            <span class="price">¥3</span>
+                                            <span class="price_btn">
+                                                <a class="jian_goods_btn" href="javascript:;"><img src="__MOBILE__/svg/jian.svg" width="25px" alt=""></a>
+                                                <a href="javascript:;" class="shop_num">1</a>
+                                                <a class="jia_goods_btn" href="javascript:;"><img src="__MOBILE__/svg/add.svg" width="30px" alt=""></a>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </label>
+                </li>
+                <li class="shop_car_item">
+                    <label class="weui-cell weui-check__label" for="s12">
+                        <div class="weui-cell__hd">
+                            <input type="checkbox" class="weui-check" name="checkbox1" id="s12" checked="checked">
+                            <i class="weui-icon-checked"></i>
+                        </div>
+                        <div class="weui-cell__bd shop_car_list">
+                            <ul>
+                                <li>
+                                    <div class="goods_pic"><img src="" alt=""></div>
+                                    <div class="goods_info">
+                                        <p class="goods_tit">农夫山泉</p>
+                                        <ul class="goods_other">
+                                            <li>永辉超市2.8</li>
+                                            <li>永辉超市2.8</li>
+                                            <li>永辉超市2.8</li>
+                                        </ul>
+                                        <p class="price_dj">
+                                            <span class="price">¥5</span>
+                                            <span class="price_btn">
+                                                <a class="jian_goods_btn" href="javascript:;"><img src="__MOBILE__/svg/jian.svg" width="25px" alt=""></a>
+                                                <a href="javascript:;" class="shop_num">3</a>
+                                                <a class="jia_goods_btn" href="javascript:;"><img src="__MOBILE__/svg/add.svg" width="30px" alt=""></a>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </label>
+                </li>
+            </ul>
+        </div>
+        <div class="shop_car_footer">
+            <div class="shop_bot_l">
+                <p class="shop_num_all">共0份<span>免运费</span></p>
+                <p>商品合计：<span class="shop_tot" id="tot_all">0</span><span>（已省¥0）</span></p>
+
+            </div>
+            <div class="shop_bot_r">
+                <a href="javascript:;">购买</a>
+            </div>
+        </div>
+    </div>
+    <div class="">
+
+    </div>
+</body>
+<script type="text/javascript" src="__COMMON__/js/jquery-1.8.3.min.js"></script>
+<script>
+    //复选框
+    var olab = document.getElementsByClassName('weui-check__label');
+    var oli = document.getElementsByClassName('shop_car_item');
+    //减按钮
+    var oj = document.getElementsByClassName('jian_goods_btn');
+    //加按钮
+    var oa = document.getElementsByClassName('jia_goods_btn');
+    //商品数量
+    var on = document.getElementsByClassName('shop_num');
+    var otot_all = document.getElementById('tot_all');
+    var tot = null;
+    var tot_num = null;
+    var nums = null;
+    var arr = [];
+    otot_all.innerHTML = total();
+    for(var i = 0;i<olab.length;i++){
+        olab[i].index = i;
+        olab[i].onclick = function () {
+            otot_all.innerHTML = total();
+        }
+    }
+    function total() {
+        arr = [];
+        tot = null;
+        for(var k = 0;k<oli.length;k++){
+            if(oli[k].getElementsByClassName('weui-check')[0].checked){
+                arr.push(oli[k]);
+            }
+        }
+        for(var i = 0;i<arr.length;i++){
+            tot_num = arr[i].getElementsByClassName('price')[0].innerHTML.split('¥')[1];
+            nums = arr[i].getElementsByClassName('shop_num')[0].innerHTML;
+            tot+=parseInt(tot_num)*parseInt(nums);
+        }
+        return tot;
+    }
+    for(var j = 0;j<oj.length;j++){
+        oj[j].index = j;
+        oj[j].onclick = function () {
+            if(parseInt(on[this.index].innerHTML)<=1){
+                on[this.index].innerHTML = 1;
+                otot_all.innerHTML = total();
+                tot = null;
+            }else{
+                on[this.index].innerHTML = parseInt(on[this.index].innerHTML)-1;
+                otot_all.innerHTML = total();
+                tot = null;
+
+            }
+        };
+    };
+    for(var i = 0;i<oa.length;i++){
+        oa[i].index = i;
+        oa[i].onclick = function () {
+            on[this.index].innerHTML = parseInt(on[this.index].innerHTML)+1;
+            otot_all.innerHTML = total();
+            tot = null;
+        };
+    };
+
+    //
+</script>
+</html>

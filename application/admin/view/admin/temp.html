@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>临时</title>
+    <style>
+        .input{
+            cursor: pointer;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" class="input" id="s_time" placeholder="点击选择时间" readonly>
+    <input type="text" class="input" id="e_time" placeholder="点击选择时间" readonly>
+</body>
+<include file="public:date" />
+<script>
+    document.getElementById('s_time').onclick=function () {
+        on_jeDate("s_time","");
+    }
+    document.getElementById('e_time').onclick=function () {
+        var minTime = document.getElementById('s_time').value;
+        if(minTime !== ""){
+            on_jeDate("e_time",minTime);
+        }
+    }
+</script>
+</html>

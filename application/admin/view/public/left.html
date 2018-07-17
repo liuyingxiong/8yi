@@ -1,0 +1,31 @@
+<!-- 菜单 -->
+<div class="span2" style="background: #1C2B36; height: 100%;">
+    <div class="nav-collapse sidebar-nav">
+        <ul class="nav nav-tabs nav-stacked main-menu">
+            <li <if condition="$location eq 'Index' && $method eq 'index'">class="active"</if>> <!--  -->
+                <a class="submenu" href="{:url('Index/index')}">
+                    <i class="icon-home"></i>
+                    <span class="hidden-tablet">首页</span>
+                </a>
+            </li>
+            <foreach name="left_menu" item="list">
+                <li>
+                    <a href="javascript:void(0)" class="menu-one">
+                        <i class="icon-folder-close-alt"></i>
+                        <span class="hidden-tablet">{$list.name}</span>
+                    </a>
+                    <ul>
+                        <foreach name="list.child" item="vo">
+                            <li <if condition="$vo.act eq $location && $vo.op eq $method"></if> >
+                            <a class="submenu" href="javascript:void(0)" data-param="{$vo.act}/{$vo.op}">
+                                <i class="icon-file-alt"></i>
+                                <span class="hidden-tablet">{$vo.name}</span>
+                            </a>
+                            </li>
+                        </foreach>
+                    </ul>
+                </li>
+            </foreach>
+        </ul>
+    </div>
+</div>
