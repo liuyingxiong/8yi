@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:67:"E:\stuby\PHPTutorial\WWW\8yi/application/admin\view\order\list.html";i:1531813954;s:75:"E:\stuby\PHPTutorial\WWW\8yi\application\admin\view\order\search_order.html";i:1531738690;s:68:"E:\stuby\PHPTutorial\WWW\8yi\application\admin\view\public\date.html";i:1531790260;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:67:"E:\stuby\PHPTutorial\WWW\8yi/application/admin\view\order\list.html";i:1531909646;s:68:"E:\stuby\PHPTutorial\WWW\8yi\application\admin\view\public\date.html";i:1531790260;}*/ ?>
 
     <style>
         .pagination{
@@ -9,6 +9,18 @@
         }
         #goods-edit{
             display: none;
+        }
+        form input {
+            width: 160px;
+        }
+        input::-webkit-input-placeholder{
+            color: #111111;
+        }
+        select {
+            line-height: inherit;
+            width: 120px;
+            color: #111111;
+            text-outline: none;
         }
     </style>
     <!-- 订单列表 -->
@@ -26,12 +38,29 @@
                 </div>
             </div>
             <div class="box-content" id="searchBefore" style="display: block">
-                <form action="" method="get" id="search">
-                    <input type="text" aria-controls="DataList" name="order_sn" value="" placeholder="订单编码">
-                    <input type="text" aria-controls="DataList" name="phone" value="" placeholder="收货人电话" maxlength="11">
-                    <input class="laydate-icon" id="stime" type="text" name="s_time" data-options="{'type':'YYYY-MM-DD hh:mm:ss','beginYear':2018,'endYear':2088}" value="" placeholder="请点击此处选择开始时间" readonly/>
-                    <input class="laydate-icon" id="etime" type="text" name="e_time" data-options="{'type':'YYYY-MM-DD hh:mm:ss','beginYear':2018,'endYear':2088}" value="" placeholder="请点击此处选择结束时间" readonly/>
-                    <input type="button" class="btn btn-info" onclick="search()" style="height: 30px;margin-bottom: 10px" value="搜索">
+                <form action="<?php echo url('Order/list'); ?>" method="post" id="search">
+                     <input type="text" aria-controls="DataList" name="ss_order_sn"  AUTOCOMPLETE="off" value="<?php if(empty($where['order_sn'])){echo '';}else{echo trim($where['order_sn'][1],'%');}?>" placeholder="订单编码">
+                     <input type="text" aria-controls="DataList" name="ss_phone"  AUTOCOMPLETE="off" value="<?php if(empty($where['phone'])){echo '';}else{echo $where['phone'];}?>" placeholder="收货人电话" maxlength="11">
+                     <input class="laydate-icon" id="stime" type="text" name="s_time" data-options="{'type':'YYYY-MM-DD hh:mm:ss','beginYear':2018,'endYear':2088}" value="<?php if(empty($where['addtime'])){echo '';}else{echo date('Y-m-d H:i:s',$where['addtime'][1][0]);}?>" placeholder="请点击此处选择开始时间" readonly/>
+                     <input class="laydate-icon" id="etime" type="text" name="e_time" data-options="{'type':'YYYY-MM-DD hh:mm:ss','beginYear':2018,'endYear':2088}" value="<?php if(empty($where['addtime'])){echo '';}else{echo date('Y-m-d H:i:s',$where['addtime'][1][1]);}?>" placeholder="请点击此处选择结束时间" readonly/>
+                     <select name="ss_order_state" style="outline: none;">
+                         <option value="" style="text-outline: none;">请选择订单状态</option>
+                         <option value="0" <?php if(array_key_exists('order_state',$where)){if($where["order_state"]!=1){echo "selected";}else{echo "";}}echo ""; ?> >未确认</option>
+                         <option value="1" <?php if(array_key_exists('order_state',$where)){if($where["order_state"]==1){echo "selected";}else{echo "";}}else{echo "";} ?> >已确认</option>
+                     </select>
+                     <select name="ss_delivery_state" style="outline: none;">
+                         <option value="">请选择送货状态</option>
+                         <option value="0" <?php if(array_key_exists('delivery_state',$where)){if($where["delivery_state"]<1){echo "selected";}else{echo "";}}echo ""; ?> >等待付款</option>
+                         <option value="1" <?php if(array_key_exists('delivery_state',$where)){if($where["delivery_state"]==1){echo "selected";}else{echo "";}}else{echo "";} ?> >备货中</option>
+                         <option value="2" <?php if(array_key_exists('delivery_state',$where)){if($where["delivery_state"]==2){echo "selected";}else{echo "";}}else{echo "";} ?> >送货中</option>
+                         <option value="3" <?php if(array_key_exists('delivery_state',$where)){if($where["delivery_state"]==3){echo "selected";}else{echo "";}}else{echo "";} ?> >完成交接</option>
+                    </select>
+                    <select name="ss_payment_state" style="outline: none;">
+                         <option value="">请选择付款状态</option>
+                         <option value="0" <?php if(array_key_exists('payment_state',$where)){if($where["payment_state"]!=1){echo "selected";}else{echo "";}}echo ""; ?>>未付款</option>
+                         <option value="1" <?php if(array_key_exists('payment_state',$where)){if($where["payment_state"]==1){echo "selected";}else{echo "";}}else{echo "";} ?> >已付款</option>
+                    </select>
+                    <input type="button" class="btn btn-info" onclick="search(1)" style="height: 30px;margin-bottom: 10px" value="搜索">
                 </form>
                 <div class="dataTables_wrapper" role="grid">
                     <div class="dataTables_filter"></div>
@@ -111,85 +140,6 @@
                     </div>
                     <?php echo $page; ?>
                 </div>
-            </div>
-
-            <!-- 搜索结果 -->
-            <div class="box-content" id="searchAfter" style="display: none">
-                <div class="dataTables_wrapper" role="grid">
-        <div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0; width: 100%;">
-            <div class="dataTables_scrollHeadInner" style="padding-right: 0;">
-                <table class="table table-striped table-bordered bootstrap-datatable dataTable" style="margin-left: 0;">
-                    <thead>
-                    <tr role="row">
-                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 15%; text-align: center">订单编码</th>
-                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 7%; text-align: center">下单ID</th>
-                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 7%; text-align: center">收货人名称</th>
-                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 8%; text-align: center">收货人电话</th>
-                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 15%; text-align: center">收货人地址</th>
-                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 7%; text-align: center">订单总价</th>
-                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 10%; text-align: center">下单时间</th>
-                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 5%; text-align: center">订单状态</th>
-                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 5%; text-align: center">送货状态</th>
-                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 5%; text-align: center">付款状态</th>
-                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 16%; text-align: center">操作</th>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-        <div class="dataTables_scrollBody" style="overflow: auto; width: 100%;">
-            <table class="table table-striped table-bordered bootstrap-datatable dataTable" aria-describedby="DataList_info" style="margin-left: 0; width: 110%;">
-                <thead>
-                <tr role="row" style="height: 0;">
-                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 15%;"></th>
-                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 7%;"></th>
-                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 7%;"></th>
-                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 8%;"></th>
-                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 15%;"></th>
-                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 7%;"></th>
-                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 10%;"></th>
-                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 5%;"></th>
-                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 5%;"></th>
-                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 5%;"></th>
-                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 16%;"></th>
-                </tr>
-                </thead>
-                <tbody role="alert" aria-live="polite" aria-relevant="all">
-                <?php if(is_array($goods) || $goods instanceof \think\Collection || $goods instanceof \think\Paginator): if( count($goods)==0 ) : echo "" ;else: foreach($goods as $key=>$list): ?>
-                    <tr class="odd">
-                        <td style="vertical-align: middle; text-align: center"><?php echo $list['order_sn']; ?></td>
-                        <td style="vertical-align: middle; text-align: center"><?php echo $list['uid']; ?></td>
-                        <td style="vertical-align: middle; text-align: center"><?php echo $list['people']; ?></td>
-                        <td style="vertical-align: middle; text-align: center"><?php echo $list['phone']; ?></td>
-                        <td style="vertical-align: middle;"><?php echo $list['address']; ?></td>
-                        <td style="vertical-align: middle;">￥: <?php echo $list['total']; ?></td>
-                        <td style="vertical-align: middle;"><?php echo date("Y-m-d H:i:s",$list['addtime']); ?></td>
-                        <td style="vertical-align: middle;">
-                            <?php switch($list['order_state']): case "1": ?>已完成<?php break; case "2": ?>会员取消<?php break; default: ?>未完成
-                            <?php endswitch; ?>
-                        </td>
-                        <td style="vertical-align: middle;">
-                            <?php switch($list['delivery_state']): case "1": ?>等待出货<?php break; case "2": ?>正在送货<?php break; case "3": ?>完成签收<?php break; default: ?>等待付款
-                            <?php endswitch; ?>
-                        </td>
-                        <td style="vertical-align: middle; text-align: center">
-                            <?php switch($list['payment_state']): case "1": ?>已付款<?php break; default: ?>未付款
-                            <?php endswitch; ?>
-                        </td>
-                        <td>
-                            <a class="btn btn-info" style="margin-right: 3px;" href="javascript:void(0)" onclick="editGoods('<?php echo $list['order_sn']; ?>')"><i class="halflings-icon white zoom-in"></i>查看</a>
-                            <?php if($list['order_state'] == 1 && $list['payment_state'] == 1 && $list['delivery_state'] == 3): ?>
-                                <a class="btn btn-danger active" href="javascript:void(0)" onclick="delOrder('<?php echo $list['order_sn']; ?>')" style="margin-right: 3px;"><i class="halflings-icon white remove"></i>删除</a>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                <?php endforeach; endif; else: echo "" ;endif; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <?php echo $page; ?>
-</div></include>
             </div>
         </div>
     </div>
@@ -350,10 +300,10 @@
 
         // 页面跳转
         $(".pagination ul li a").click(function () {
-            var p = $(this).data("p");
-            if(typeof(p) !== "undefined"){
-                load();
-                ajaxUrl("Order/list/p/"+p);
+            var _p = $(this).data("p");
+            if(typeof(_p) !== "undefined"){
+                p = _p;
+                search(p);
             }
         });
 
@@ -409,24 +359,22 @@
         }
 
         //搜索订单号
-        function search() {
+        function search(b) {
+            p = b;
             $.ajax({
                 type: "POST",
-                url: "<?php echo url('Order/searchOrder'); ?>",
-                data: $('#search').serialize(),
+                url: "/index.php/Admin/Order/list/p/"+p,
+                data: $("#search").serialize(),
                 success: function (data) {
                     layer.closeAll();
                     if(data.ret == -1){
                         layer.msg(data.msg,{icon:2,time:2000});
-                    }else{
-                        $("#searchAfter").html('');
-                        $("#searchAfter").append(data);
-                        $("#searchBefore").css('display','none');
-                        $("#searchAfter").css("display","block");
-                        $("#backBtn").css("display","block");
+                    }else {
+                        $(".content").html('');
+                        $(".content").append(data);
                     }
                 }
-            })
+            });
         }
 
         //返回起始页

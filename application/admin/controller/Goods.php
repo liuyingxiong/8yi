@@ -5,7 +5,6 @@ use app\common\logic\ActivityGoodsLogic;
 use app\common\logic\GoodsCategoryLogic;
 use app\common\logic\GoodsLogic;
 use app\common\model\GoodsCategory;
-use think\Db;
 
 class Goods extends Base
 {
@@ -14,19 +13,57 @@ class Goods extends Base
      */
     public function list()
     {
+        $where = [];
+        $arr = input('post.') ? input('post.') : false;
+        //商品编码
+        if (isset($arr['ss_goods_sn'])) {
+            if (trim($arr['ss_goods_sn']) != "") {
+                $where['goods_sn'] = ['like', '%' . trim($arr['ss_goods_sn']) . '%'];
+            } else {
+                unset($arr['ss_goods_sn']);
+            }
+        }
+        //商品名称
+        if (isset($arr['ss_goods_name'])) {
+            if (trim($arr['ss_goods_name']) != "") {
+                $where['goods_name'] = ['like', '%' . trim($arr['ss_goods_name']) . '%'];
+            } else {
+                unset($arr['ss_goods_name']);
+            }
+        }
+        //所属分类
+        if (isset($arr['category'])){
+            if(trim($arr['category']) != "") {
+                $where['cat_id'] = trim($arr['category']);
+            } else {
+                unset($arr['category']);
+            }
+        }
+        //状态
+        if (isset($arr['ss_on_sale'])) {
+            if (trim($arr['ss_on_sale']) != "") {
+                $where['is_on_sale'] = trim($arr['ss_on_sale']);
+            } else {
+                unset($arr['ss_on_sale']);
+            }
+        }
         $p = input("param.p") ? input("param.p") : 1;
         $this->assign('p',$p);
         $GoodsM = new GoodsLogic();
-        $count = $GoodsM -> getGoodsCount();
+        $count = $GoodsM -> getGoodsCount($where);
         $page = adminPage($p,$count);
         $this->assign('page',$page);
-        $goods = $GoodsM->getGoodsInfo([],"goods_id desc",$p);
+        $this->assign('where',$where);
+        $goods = $GoodsM->getGoodsInfo($where,"goods_id desc",$p);
         if(!empty($goods)){
             $goodsCM = new GoodsCategory();
             foreach ($goods as $k => $list){
                 $res = $goodsCM->field("name")->where("id",$list['cat_id'])->find();
                 $goods[$k]['cat_id'] = $res['name'];
             }
+        }
+        if (empty($goods)){
+            return ret(-1,"","没有该商品");
         }
         $this->assign('goods',$goods);
         $goodsCate = (new GoodsCategoryLogic())->getCateSelect();
@@ -320,71 +357,5 @@ class Goods extends Base
             }
         };
         return ret(-1,"","参数错误");
-    }
-
-    /**
-     * 搜索商品信息
-     */
-    public function searchGoods()
-    {
-        if ($this->request->isAjax()) {
-            $arr = input("post.") ? input("post.") : false;
-            $where = [];
-            //商品编码
-            if (isset($arr['ss_goods_sn'])) {
-                if (trim($arr['ss_goods_sn']) != "") {
-                    $where['goods_sn'] = ['like', '%' . trim($arr['ss_goods_sn']) . '%'];
-                } else {
-                    unset($arr['ss_goods_sn']);
-                }
-            }
-            //商品名称
-            if (isset($arr['ss_goods_name'])) {
-                if (trim($arr['ss_goods_name']) != "") {
-                    $where['goods_name'] = ['like', '%' . trim($arr['ss_goods_name']) . '%'];
-                } else {
-                    unset($arr['ss_goods_name']);
-                }
-            }
-            //所属分类
-            if (isset($arr['category'])){
-                if(trim($arr['category']) != "") {
-                    $where['cat_id'] = trim($arr['category']);
-                } else {
-                    unset($arr['category']);
-                }
-            }
-            //状态
-            if (isset($arr['ss_on_sale'])) {
-                if (trim($arr['ss_on_sale']) != "") {
-                    $where['is_on_sale'] = trim($arr['ss_on_sale']);
-                } else {
-                    unset($arr['ss_on_sale']);
-                }
-            }
-            //判断
-            if (!empty($where)){
-                $p = input("param.p") ? input("param.p") : 1;
-                $this->assign('p',$p);
-                $GoodsM = new GoodsLogic();
-                $count = $GoodsM -> getGoodsCount($where);
-                $page = adminPage($p,$count);
-                $this->assign('page',$page);
-                $goods = Db::name('goods')->where($where)->select();
-                if(!empty($goods)){
-                    $goodsCM = new GoodsCategory();
-                    foreach ($goods as $k => $list){
-                        $res = $goodsCM->field("name")->where("id",$list['cat_id'])->find();
-                        $goods[$k]['cat_id'] = $res['name'];
-                    }
-                }
-                if (empty($goods)){
-                    return ret(-1,"","没有该商品");
-                }
-                $this->assign('goods',$goods);
-                return $this->fetch();
-            }
-            return ret(-1,"","没有该商品");
-        }
     }
 }

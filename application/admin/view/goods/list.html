@@ -9,15 +9,23 @@
         #goods-edit{
             display: none;
         }
+        form input {
+            width: 160px;
+        }
+        input::-webkit-input-placeholder{
+            color: #111111;
+        }
+        select option{
+            width: 200px;
+            color: #111111;
+        }
+
     </style>
     <!-- 商品列表 -->
     <div class="row-fluid sortable ui-sortable" id="goods-list">
         <div class="box span12">
             <div class="box-header" data-original-title="">
                 <h2><i class="halflings-icon white user"></i><span class="break"></span>商品列表</h2>
-                <div style="float: left; position: relative; top: -11px; margin-left: 80px; display: none" id="backBtn">
-                    <a class="btn btn-success active" style="margin-right: 3px;" href="javascript:void(0)" onclick="backBtn()"><i class="halflings-icon white edit"></i>返回</a>
-                </div>
                 <div class="box-icon">
                     <a href="javascript:void(0)" class="btn-minimize">
                         <i class="halflings-icon white chevron-up"></i>
@@ -25,21 +33,21 @@
                 </div>
             </div>
             <div class="box-content" id="searchBefore" style="display: block">
-                <form action="{:url('Goods/list')}" method="post" id="search">
-                    <input type="text" aria-controls="DataList" name="ss_goods_sn" value="" placeholder="商品编码">
-                    <input type="text" aria-controls="DataList" name="ss_goods_name" value="" placeholder="商品名称">
-                    <select name="category" style="line-height: inherit">
+                <form action="{:url('Goods/list')}" method="get" id="search">
+                    <input type="text" name="ss_goods_sn" value="<?php if(empty($where['goods_sn'])){echo '';}else{echo trim($where['goods_sn'][1],'%');}?>"  AUTOCOMPLETE="off" placeholder="商品编码" >
+                    <input type="text" aria-controls="DataList" name="ss_goods_name" value="<?php if(empty($where['goods_name'])){echo '';}else{echo trim($where['goods_name'][1],'%');}?>"  AUTOCOMPLETE="off" placeholder="商品名称">
+                    <select name="category" style="outline: none;line-height: inherit;">
                         <option value="">请选择所属分类</option>
                         <foreach name="$goodsCate" item="list">
-                            <option value="{$list.id}">{$list.name}</option>
+                            <option value="{$list.id}"<?php if(empty($where["cat_id"])){echo "";}else{if($where["cat_id"]==$list->id){echo "selected";}else{echo "";}} ?> >{$list.name}[{$list.mobile_name}]</option>
                         </foreach>
                     </select>
-                    <select name="ss_on_sale" style="line-height: inherit">
+                    <select name="ss_on_sale" style="outline: none;line-height: inherit;">
                         <option value="">请选择状态</option>
-                        <option value="1">正常</option>
-                        <option value="0">下架</option>
+                        <option value="1" <?php if(empty($where["is_on_sale"])){echo "";}else{if($where["is_on_sale"]==1){echo "selected";}else{echo "";}} ?> >正常</option>
+                        <option value="0" <?php if(array_key_exists('is_on_sale',$where)){if($where["is_on_sale"]!=1){echo "selected";}else{echo "";}}echo ""; ?> >下架</option>
                     </select>
-                    <input type="button" class="btn btn-info" onclick="search()" style="height: 30px;margin-bottom: 10px" value="搜索">
+                    <input type="button" class="btn btn-info" onclick="search(1)" style="height: 30px;margin-bottom: 10px" value="搜索">
                 </form>
                 <div class="dataTables_wrapper" role="grid">
                     <div class="dataTables_filter">
@@ -121,11 +129,6 @@
                     {$page}
                 </div>
             </div>
-
-            <!-- 搜索结果 -->
-            <div class="box-content" id="searchAfter" style="display: none">
-                <include file="goods:search_goods"></include>
-            </div>
         </div>
     </div>
 
@@ -138,10 +141,12 @@
 
         // 页面跳转
         $(".pagination ul li a").click(function () {
-            var p = $(this).data("p");
-            if(typeof(p) !== "undefined"){
-                load();
-                ajaxUrl("Goods/list/p/"+p);
+            var _p = $(this).data("p");
+            if(typeof(_p) !== "undefined"){
+                p = _p;
+                search(p);
+//                load();
+//                ajaxUrl("Goods/list/p/"+p);
             }
         });
 
@@ -226,42 +231,22 @@
         }
 
         //搜索商品
-        function search() {
+        function search(b) {
+            p = b;
             $.ajax({
                 type: "POST",
-                url: "/index.php/Admin/Goods/list",
-                success: function (data) {
-                    $(".content").html('');
-                    $(".content").append(data);
-                }
-            });
-           /* $.ajax({
-                type: "POST",
-                url: "{:url('Goods/searchGoods')}",
-                data: $('#search').serialize(),
+                url: "/index.php/Admin/Goods/list/p/"+p,
+                data: $("#search").serialize(),
                 success: function (data) {
                     layer.closeAll();
                     if(data.ret == -1){
                         layer.msg(data.msg,{icon:2,time:2000});
-                    }else{
-                        $("#searchAfter").html('');
-                        $("#searchAfter").append(data);
-                        $("#searchBefore").css('display','none');
-                        $("#searchAfter").css("display","block");
-                        $("#backBtn").css("display","block");
+                    }else {
+                        $(".content").html('');
+                        $(".content").append(data);
                     }
                 }
-            })*/
-        }
-
-        //返回起始页
-        function backBtn() {
-            $("#searchAfter").html('');
-            $("#searchAfter").css("display","none");
-            $("#backBtn").css("display","none");
-            $("#searchBefore").css('display','block');
-            load()
-            ajaxUrl("Goods/list")
+            });
         }
     </script>
 </block>

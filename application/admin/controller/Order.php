@@ -12,13 +12,68 @@ class Order extends Base
      */
     public function list()
     {
+        $where = [];
+        $arr = input("post.") ? input("post.") : false;
+        // 订单号
+        if(isset($arr['ss_order_sn'])){
+            if(trim($arr['ss_order_sn']) != ""){
+                $where['order_sn'] = ['like','%'.trim($arr['ss_order_sn']).'%'];
+            }else{
+                unset($arr['ss_order_sn']);
+            }
+        }
+        // 收货人电话
+        if(isset($arr['ss_phone'])){
+            if(trim($arr['ss_phone']) != ""){
+                $where['phone'] = trim($arr['ss_phone']);
+            }else{
+                unset($arr['ss_phone']);
+            }
+        }
+        // 时间范围
+        if(isset($arr['s_time']) && isset($arr['e_time'])){
+            if($arr['s_time'] != "" && $arr['e_time'] != ""){
+                $where['addtime'] = ['between',[strtotime($arr['s_time']),strtotime($arr['e_time'])]];
+            }else{
+                unset($arr['s_time']);
+                unset($arr['e_time']);
+            }
+        }
+        //订单状态
+        if (isset($arr['ss_order_state'])){
+            if ($arr['ss_order_state'] != ""){
+                $where['order_state'] = $arr['ss_order_state'];
+            }else{
+                unset($arr['ss_order_state']);
+            }
+        }
+        //送货状态
+        if (isset($arr['ss_delivery_state'])){
+            if ($arr['ss_delivery_state'] != ""){
+                $where['delivery_state'] = $arr['ss_delivery_state'];
+            }else{
+                unset($arr['ss_delivery_state']);
+            }
+        }
+        //付款状态
+        if (isset($arr['ss_payment_state'])){
+            if ($arr['ss_payment_state'] != ""){
+                $where['payment_state'] = $arr['ss_payment_state'];
+            }else{
+                unset($arr['ss_payment_state']);
+            }
+        }
         $p = input("param.p") ? input("param.p") : 1;
         $this->assign('p',$p);
         $GoodsM = new OrderLogic();
-        $count = $GoodsM -> getOrderCount();
+        $count = $GoodsM -> getOrderCount($where);
         $page = adminPage($p,$count);
         $this->assign('page',$page);
-        $goods = $GoodsM->getOrderInfo([],"order_id desc",$p);
+        $this->assign('where',$where);
+        $goods = $GoodsM->getOrderInfo($where,"order_id desc",$p);
+        if (empty($goods)){
+            return ret(-1,"","没有该订单");
+        }
         $this->assign('goods',$goods);
         return $this->fetch();
     }
@@ -105,59 +160,5 @@ class Order extends Base
             }
         }
         return $this->fetch();
-    }
-
-    /**
-     * 搜索订单号
-     */
-    public function searchOrder()
-    {
-        if($this->request->isAjax()){
-            $arr = input("post.") ? input("post.") : false;
-            $where = [];
-            // 订单号
-            if(isset($arr['order_sn'])){
-                if(trim($arr['order_sn']) != ""){
-                    $where['order_sn'] = ['like','%'.trim($arr['order_sn']).'%'];
-                }else{
-                    unset($arr['order_sn']);
-                }
-            }
-            // 收货人电话
-            if(isset($arr['phone'])){
-                if(trim($arr['phone']) != ""){
-                    $where['phone'] = trim($arr['phone']);
-                }else{
-                    unset($arr['phone']);
-                }
-            }
-            // 时间范围
-            if(isset($arr['s_time']) && isset($arr['e_time'])){
-                if($arr['s_time'] != "" && $arr['e_time'] != ""){
-                    $where['addtime'] = ['between',[strtotime($arr['s_time']),strtotime($arr['e_time'])]];
-                }else{
-                    unset($arr['s_time']);
-                    unset($arr['e_time']);
-                }
-            }
-            // 判断
-            if(!empty($where)){
-                $p =  input("param.p") ? input("param.p") : 1;
-                $this->assign('p',$p);
-                $GoodsM = new OrderLogic();
-                $count = $GoodsM -> getOrderCount($where);
-                $page = adminPage($p,$count);
-                $this->assign('page',$page);
-
-                $ret = Db::name("order")->where($where)->select();
-                if (empty($ret)){
-                    return ret(-1,"","没有该订单");
-                }
-                $this->assign('goods',$ret);
-                return $this->fetch();
-            }
-            return ret(-1,'',"没有该订单");
-        }
-        return ret(-1,"","无参数");
     }
 }
