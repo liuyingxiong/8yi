@@ -1,73 +1,1 @@
-<?php
-namespace app\admin\controller;
-
-use app\common\logic\UserLogic;
-
-class User extends Base
-{
-    /**
-     * 用户列表
-     */
-    public function list()
-    {
-        $p = input("param.p") ? input("param.p") : 1;
-        $this->assign('p',$p);
-        $userL = new UserLogic();
-        $count = $userL -> getUsersCount();
-        $page = adminPage($p,$count);
-        $this->assign('page',$page);
-        $users = $userL->getUsers([],"id desc",$p);
-        $this->assign('users',$users);
-        return $this->fetch();
-    }
-
-    /**
-     * 删除用户
-     */
-    public function delUser()
-    {
-        if($this->request->isAjax()){
-            $arr = input("post.id") ? input("post.id") : false;
-            if($arr){
-                $res = (new UserLogic())->delUser(['id'=>$arr]);
-                return $res;
-            }
-        }
-        return ret(-1,"","参数错误");
-    }
-
-    /**
-     * 获取用户电话详情
-     */
-    public function mobi_show()
-    {
-        if($this->request->isAjax()){
-            $id = input("post.id") ? input("post.id") : false;
-            if($id){
-                // 获取用户信息
-                $ret = (new UserLogic())->getUserInfo("id",$id);
-                if(!empty($ret)){
-                    return ret(1,"",$ret['mobile']);
-                }
-            }
-        }
-        return ret(-1,"","参数错误");
-    }
-
-    /**
-     * 用户详情页面
-     */
-    public function userdeta()
-    {
-        if($this->request->isAjax()){
-            $id = input("post.id") ? input("post.id") : false;
-            if(!$id){
-                return ret(-1,"","参数错误");
-            }
-            $userInfo = (new UserLogic())->getUserInfo('id',$id);
-            $this->assign('userInfo',$userInfo);
-            return $this->fetch();
-        }
-        return ret(-1,"","参数错误");
-    }
-}
+<?phpnamespace app\admin\controller;use app\common\logic\UserLogic;class User extends Base{    /**     * 用户列表     */    public function list()    {        $arr = input('post.') ? input('post.') : false;        $where = [];        //昵称        if (isset($arr['ss_nickname'])){            if (trim($arr['ss_nickname']) != ""){                $where['nickname'] = ['like','%'.trim($arr['ss_nickname']).'%'];            }else{                unset($where['nickname']);            }        }        //用户状态        if (isset($arr['ss_state'])){            if ($arr['ss_state'] != ""){                $where['state'] = $arr['ss_state'];            }else{                unset($where['state']);            }        }        $p = input("param.p") ? input("param.p") : 1;        $this->assign('p',$p);        $userL = new UserLogic();        $count = $userL -> getUsersCount($where);        $page = adminPage($p,$count);        $this->assign('page',$page);        $this->assign('where',$where);        $users = $userL->getUsers($where,"id desc",$p);        //判断        if (empty($users)){            var_dump($users);exit;            return ret(-1,"","没有该用户");        }        $this->assign('users',$users);        return $this->fetch();    }    /**     * 删除用户     */    public function delUser()    {        if($this->request->isAjax()){            $arr = input("post.id") ? input("post.id") : false;            if($arr){                $res = (new UserLogic())->delUser(['id'=>$arr]);                return $res;            }        }        return ret(-1,"","参数错误");    }    /**     * 获取用户电话详情     */    public function mobi_show()    {        if($this->request->isAjax()){            $id = input("post.id") ? input("post.id") : false;            if($id){                // 获取用户信息                $ret = (new UserLogic())->getUserInfo("id",$id);                if(!empty($ret)){                    return ret(1,"",$ret['mobile']);                }            }        }        return ret(-1,"","参数错误");    }    /**     * 用户详情页面     */    public function userdeta()    {        if($this->request->isAjax()){            $id = input("post.id") ? input("post.id") : false;            if(!$id){                return ret(-1,"","参数错误");            }            $userInfo = (new UserLogic())->getUserInfo('id',$id);            $this->assign('userInfo',$userInfo);            return $this->fetch();        }        return ret(-1,"","参数错误");    }    //更新用户状态    public function modifyUser()    {        if ($this->request->isAjax()){            $arr = input('post.') ? input('post.') : false;            $where = [];            $where['id'] = $arr['id'];            $ret = (new UserLogic())->updateInto($where,['state'=>$arr['state']]);            return $ret;        }        return ret(-1,"","更新失败");    }}

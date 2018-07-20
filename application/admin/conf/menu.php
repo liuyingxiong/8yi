@@ -7,6 +7,8 @@ return array(
     'admin' => array('name' => '管理者模块', 'child' => array(
         array('name' => '管理者列表', 'act' => 'Admin', 'op' => 'list'),
         array('name' => '管理者添加', 'act' => 'Admin', 'op' => 'add'),
+        array('name' => '角色列表', 'act' => 'Admin', 'op' => 'role_list'),
+        array('name' => '权限列表', 'act' => 'Admin', 'op' => 'auth_list'),
     )),
     'user' => array('name' => '用户模块', 'child' => array(
         array('name' => '用户列表', 'act' => 'User', 'op' => 'list'),

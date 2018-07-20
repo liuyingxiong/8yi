@@ -1,0 +1,140 @@
+<block name="content">
+    <style>
+        #admin-modify{
+            display: none;
+        }
+    </style>
+    <!-- 角色列表 -->
+    <div class="row-fluid sortable ui-sortable" id="auth_list">
+        <div class="box span12">
+            <div class="box-header" data-original-title="">
+                <h2><i class="halflings-icon white user"></i><span class="break"></span>权限列表</h2>
+                <div style="float: left; position: relative; top: -11px; margin-left: 80px;">
+                    <a class="btn btn-success role" style="margin-right: 3px;" href="javascript:void(0)" onclick="addMeal()"><i class="halflings-icon white edit"></i>添加权限</a>
+                </div>
+                <div class="box-icon">
+                    <a href="javascript:void(0)" class="btn-minimize">
+                        <i class="halflings-icon white chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="box-content">
+                <div class="dataTables_wrapper" role="grid">
+                    <div class="dataTables_filter" id="DataList_filter">
+                        <!--<label>搜索 <input type="text" aria-controls="DataList"></label>-->
+                    </div>
+                    <!--<div id="DataList_processing" class="dataTables_processing" style="visibility: hidden;">正在加载中...</div>-->
+                    <div class="dataTables_scroll">
+                        <div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0px; width: 100%;">
+                            <div class="dataTables_scrollHeadInner" style="width: 1548px; padding-right: 0px;">
+                                <table class="table table-striped table-bordered bootstrap-datatable dataTable" style="margin-left: 0px; width: 1548px;">
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 10%; text-align: center">权限id</th>
+                                            <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 10%; text-align: center">权限名</th>
+                                            <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 10%; text-align: center">权限路由</th>
+                                            <!--<th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 250px; text-align: center">注册时间</th>-->
+                                            <!--<th class="sorting_disabled center" role="columnheader" rowspan="1" colspan="1" style="width: 63px; text-align: center"></th>-->
+                                            <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 30%; text-align: center">操作</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="dataTables_scrollBody" style="overflow: auto; width: 100%;">
+                            <table class="table table-striped table-bordered bootstrap-datatable dataTable" aria-describedby="DataList_info" style="margin-left: 0; width: 110%;">
+                                <thead>
+                                    <tr role="row" style="height: 0;">
+                                        <th role="columnheader" rowspan="1" colspan="1" style="padding-top: 0; padding-bottom: 0; border-top-width: 0; border-bottom-width: 0; height: 0; width: 10%;"></th>
+                                        <th role="columnheader" rowspan="1" colspan="1" style="padding-top: 0; padding-bottom: 0; border-top-width: 0; border-bottom-width: 0; height: 0; width: 11%;"></th>
+                                        <th role="columnheader" rowspan="1" colspan="1" style="padding-top: 0; padding-bottom: 0; border-top-width: 0; border-bottom-width: 0; height: 0; width: 10%;"></th>
+                                        <th role="columnheader" rowspan="1" colspan="1" style="padding-top: 0; padding-bottom: 0; border-top-width: 0; border-bottom-width: 0; height: 0; width: 30%;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                <foreach name="authList" item="list">
+                                    <tr class="odd">
+                                        <td style="vertical-align: middle; text-align: center;">{$list.id}</td>
+                                        <td style="vertical-align: middle; text-align: center;">{$list.name}</td>
+                                        <td style="vertical-align: middle; text-align: center;">{$list.url}</td>
+                                        <td style="vertical-align: middle">
+                                            <a class="btn btn-success active" href="javascript:void(0)" onclick="editAuth({$list.id})"><i class="halflings-icon white edit"></i>编辑</a>
+                                            <if condition="$adminInfo['id'] eq 1">
+                                                <a class="btn btn-danger active" href="javascript:void(0)" onclick="disabledAdmin({$list['id']});"><i class="halflings-icon white remove"></i>删除</a>
+                                            </if>
+                                        </td>
+                                        <!--<td class="center">
+                                            <a class="btn btn-info" style="margin-right: 3px;" href="../User/userInfo?uid=121&amp;operation=2"><i class="halflings-icon white zoom-in"></i>查看</a>
+                                            <a class="btn btn-success active" style="    margin-right: 3px;" href="../User/editUser?uid=121"><i class="halflings-icon white edit"></i>编辑</a>
+                                            <a class="btn btn-danger active" href="javascript:void(0)" onclick="disabledUser(121);" style="margin-right: 3px;"><i class="halflings-icon white remove"></i>禁用</a>
+                                            <a class="btn btn-info" target="__brank" style="margin-right: 3px;" href="../User/friendList?uid=121"><i class="halflings-icon white zoom-in"></i>家人/好友</a>
+                                            <a class="btn btn-info" target="__brank" style="margin-right: 3px;" href="../News/newsList?uid=121"><i class="halflings-icon white zoom-in"></i>邻里圈</a>
+                                        </td>-->
+                                    </tr>
+                                </foreach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {$page}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        var p = {$p};
+        // 删除数据
+        function disabledAdmin(id)
+        {
+            var length = $(".odd").length;
+            layer.confirm('确认要删除吗？', {
+                btn : [ '确定', '取消' ]//按钮
+            }, function(index) {
+                layer.close(index);
+                load();
+                $.ajax({
+                    type : 'post',
+                    url : "{:url('Admin/delAuth')}",
+                    data : {id:id},
+                    dataType : 'json',
+                    success : function(ret){
+                        layer.closeAll();
+                        if(ret.ret === 1){
+                            layer.msg(ret.msg,{icon:2,time:3000});
+                            if(length == 1){
+                                p = p*1-1;
+                            }
+                            layer.msg(ret.msg,{icon:2,time:3000});
+                            ajaxUrl("admin/auth_list/p/"+p);
+                        }else{
+                            layer.msg(ret.msg,{icon:2,time:3000});
+                        }
+                    }
+                })
+            });
+        }
+        // 添加权限页面显示
+        function addMeal() {
+            load();
+            ajaxUrl('Admin/auth_add')
+        }
+
+        // 页面跳转
+        $(".pagination ul li a").click(function () {
+            var p = $(this).data("p");
+            if(typeof(p) !== "undefined"){
+                load();
+                ajaxUrl("admin/auth_list/p/"+p);
+            }
+        });
+
+        // 编辑页面显示
+        function editAuth(id){
+            console.log(id);
+            load();
+            ajaxUrl("admin/auth_edit/i/"+id);
+        }
+    </script>
+</block>

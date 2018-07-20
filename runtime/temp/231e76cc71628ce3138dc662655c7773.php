@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:67:"E:\stuby\PHPTutorial\WWW\8yi/application/admin\view\goods\list.html";i:1531909302;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:67:"E:\stuby\PHPTutorial\WWW\8yi/application/admin\view\goods\list.html";i:1531982839;}*/ ?>
 
     <style>
         .pagination{
@@ -137,6 +137,7 @@
     </div>
     <script>
         var p = <?php echo $p; ?>;
+
         // 页面跳转
         $(".pagination ul li a").click(function () {
             var _p = $(this).data("p");

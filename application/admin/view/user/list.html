@@ -1,165 +1,1 @@
-<block name="content">
-    <!-- 用户列表 -->
-    <div class="row-fluid sortable ui-sortable" id="user-list">
-        <div class="box span12">
-            <div class="box-header" data-original-title="">
-                <h2><i class="halflings-icon white user"></i><span class="break"></span>用户列表</h2>
-                <div class="box-icon">
-                    <a href="javascript:void(0)" class="btn-minimize">
-                        <i class="halflings-icon white chevron-up"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="box-content">
-                <div class="dataTables_wrapper" role="grid">
-                    <div class="dataTables_filter">
-                        <!--<a class="btn btn-success active" style="margin-right: 3px;" href="javascript:void(0)"><i class="halflings-icon white edit"></i>添加商品</a>-->
-                        <!--<label>搜索 <input type="text" aria-controls="DataList"></label>-->
-                    </div>
-                    <!--<div id="DataList_processing" class="dataTables_processing" style="visibility: hidden;">正在加载中...</div>-->
-                    <div class="dataTables_scroll">
-                        <div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0; width: 100%;">
-                            <div class="dataTables_scrollHeadInner" style="padding-right: 0;">
-                                <table class="table table-striped table-bordered bootstrap-datatable dataTable" style="margin-left: 0;">
-                                    <thead>
-                                    <tr role="row">
-                                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 10%; text-align: center">[id]昵称</th>
-                                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 5%; text-align: center">头像</th>
-                                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 8%; text-align: center">电话</th>
-                                        <!--<th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 15%; text-align: center">用户状态</th>-->
-                                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 25%; text-align: center">操作</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="dataTables_scrollBody" style="overflow: auto; width: 100%;">
-                            <table class="table table-striped table-bordered bootstrap-datatable dataTable" aria-describedby="DataList_info" style="margin-left: 0; width: 110%;">
-                                <thead>
-                                <tr role="row" style="height: 0;">
-                                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 10%;"></th>
-                                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 5%;"></th>
-                                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 8%;"></th>
-                                    <!--<th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 15%;"></th>-->
-                                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 25%;"></th>
-                                </tr>
-                                </thead>
-                                <tbody role="alert" aria-live="polite" aria-relevant="all">
-                                <foreach name="$users" item="list">
-                                    <tr class="odd">
-                                        <td style="vertical-align: middle; text-align: center">[<span style="color: #00b0ff">{$list.id}</span>]&nbsp;{$list.nickname}</td>
-                                        <td style="vertical-align: middle; text-align: center"><img src="{$list.photo}" class="img-circle" width="35px" alt=""></td>
-                                        <td style="vertical-align: middle; text-align: center">
-                                            <label class="mobi"+{$list.id} style="display:block" onclick="mobi_show(this,{$list.id})"><?php echo empty($list->mobile) ? "" : substr_replace($list->mobile,"***",3,4)?></label>
-                                        </td>
-                                        <!--<td style="vertical-align: middle; text-align: center">-->
-                                            <!--<switch name="list.state"><case value="1">待审核</case><case value="2">审核通过</case><case value="3">审核不通过</case><case value="4">禁用</case>-->
-                                                <!--<default />没有上传身份-->
-                                            <!--</switch>-->
-                                        <!--</td>-->
-                                        <td>
-                                            <a class="btn btn-info" style="margin-right: 3px;margin-left: 50px" href="javascript:void(0)" onclick="editUser('{$list.id}')"><i class="halflings-icon white zoom-in"></i>查看</a>
-                                                <!--<a class="btn btn-danger active" href="javascript:void(0)" onclick="delUser('{$list.id}')" style="margin-right: 3px;"><i class="halflings-icon white remove"></i>删除</a>-->
-                                        </td>
-                                    </tr>
-                                </foreach>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    {$page}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 用户编辑 -->
-    <div class="row-fluid sortable ui-sortable" id="user-edit">
-        <block name="edit"></block>
-    </div>
-
-    <script>
-        var p = {$p};
-
-        // 页面跳转
-        $(".pagination ul li a").click(function () {
-            var p = $(this).data("p");
-            if(typeof(p) !== "undefined"){
-                load();
-                ajaxUrl("User/list/p/"+p);
-            }
-        });
-
-        // 电话
-        function mobi_show(obj,id){
-            var txt = obj.innerHTML;
-            if(txt.indexOf("*") == -1){
-                return false;
-            }
-            $.ajax({
-                type : 'post',
-                url : "{:url('User/mobi_show')}",
-                data : {id:id},
-                dataType : 'json',
-                success : function(ret){
-                    if(ret.ret == 1){
-                        obj.innerHTML=ret.msg;
-                    }else{
-                        layer.alert(ret.msg, {icon: 2,time:2000});
-                    }
-                }
-            })
-        }
-
-        // 删除功能
-//        function delUser(id){
-//            var length = $(".odd").length;
-//            layer.confirm('确认要删除吗？', {
-//                btn : [ '确定', '取消' ]//按钮
-//            }, function(index) {
-//                layer.close(index);
-//                load();
-//                $.ajax({
-//                    type : 'post',
-//                    url : "{:url('User/delUser')}",
-//                    data : {id:id},
-//                    dataType : 'json',
-//                    success : function(ret){
-//                        console.log(ret);
-//                        layer.closeAll();
-//                        if(ret.ret == -1){
-//                            layer.alert(ret.msg, {icon: 2,time:2000});
-//                        }else{
-//                            if(length == 1){
-//                                p = p*1-1;
-//                            }
-//                            load();
-//                            ajaxUrl("User/list/p/"+p);
-//                        }
-//                    }
-//                })
-//            });
-//        }
-
-        // 详情页面显示
-        function editUser(id) {
-            load();
-            $.ajax({
-                type: "POST",
-                url: "{:url('User/userdeta')}",
-                data: {id:id},
-                success: function (data) {
-                    layer.closeAll();
-                    if(data.ret == -1){
-                        layer.msg(data.msg,{icon:2,time:2000});
-                    }else{
-                        $("#user-edit").html('');
-                        $("#user-edit").append(data);
-                        $("#user-list").css('display','none');
-                        $("#user-edit").css("display","block");
-                    }
-                }
-            });
-        }
-    </script>
-</block>
+<block name="content">    <style></style>    <!-- 用户列表 -->    <div class="row-fluid sortable ui-sortable" id="user-list">        <div class="box span12">            <div class="box-header" data-original-title="">                <h2><i class="halflings-icon white user"></i><span class="break"></span>用户列表</h2>                <div class="box-icon">                    <a href="javascript:void(0)" class="btn-minimize">                        <i class="halflings-icon white chevron-up"></i>                    </a>                </div>            </div>            <div class="box-content" id="searchBefore">                <form action="{:url('User/list')}" method="post" id="search">                    <input type="text" name="ss_nickname" value="<?php if(empty($where['nickname'])){echo '';}else{echo trim($where['nickname'][1],'%');}?>"  AUTOCOMPLETE="off" placeholder="用户昵称" >                    <select name="ss_state" style="outline: none;line-height: inherit;">                        <option value="">请选择状态</option>                        <option value="1" <?php if(array_key_exists('state',$where)){if($where["state"]==1){echo "selected";}else{echo "";}}echo ""; ?> >正常</option>                        <option value="0" <?php if(array_key_exists('state',$where)){if($where["state"]<=0){echo "selected";}else{echo "";}}echo ""; ?> >禁用</option>                    </select>                    <input type="button" class="btn btn-info" onclick="search(1)" style="height: 30px;margin-bottom: 10px" value="搜索">                </form>                <div class="dataTables_wrapper" role="grid">                    <div class="dataTables_filter">                        <!--<a class="btn btn-success active" style="margin-right: 3px;" href="javascript:void(0)"><i class="halflings-icon white edit"></i>添加商品</a>-->                        <!--<label>搜索 <input type="text" aria-controls="DataList"></label>-->                    </div>                    <!--<div id="DataList_processing" class="dataTables_processing" style="visibility: hidden;">正在加载中...</div>-->                    <div class="dataTables_scroll">                        <div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0; width: 100%;">                            <div class="dataTables_scrollHeadInner" style="padding-right: 0;">                                <table class="table table-striped table-bordered bootstrap-datatable dataTable" style="margin-left: 0;">                                    <thead>                                    <tr role="row">                                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 10%; text-align: center">[id]昵称</th>                                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 5%; text-align: center">头像</th>                                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 8%; text-align: center">电话</th>                                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 5%; text-align: center">用户状态</th>                                        <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 25%; text-align: center">操作</th>                                    </tr>                                    </thead>                                </table>                            </div>                        </div>                        <div class="dataTables_scrollBody" style="overflow: auto; width: 100%;">                            <table class="table table-striped table-bordered bootstrap-datatable dataTable" aria-describedby="DataList_info" style="margin-left: 0; width: 110%;">                                <thead>                                <tr role="row" style="height: 0;">                                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 10%;"></th>                                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 5%;"></th>                                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 8%;"></th>                                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 5%;"></th>                                    <th role="columnheader" rowspan="1" colspan="1" style="padding: 0; height: 0; width: 25%;"></th>                                </tr>                                </thead>                                <tbody role="alert" aria-live="polite" aria-relevant="all">                                <foreach name="$users" item="list">                                    <tr class="odd">                                        <td style="vertical-align: middle; text-align: center">[<span style="color: #00b0ff">{$list.id}</span>]&nbsp;{$list.nickname}</td>                                        <td style="vertical-align: middle; text-align: center"><img src="{$list.photo}" class="img-circle" width="35px" alt=""></td>                                        <td style="vertical-align: middle; text-align: center">                                            <label class="mobi"+{$list.id} style="display:block" onclick="mobi_show(this,{$list.id})"><?php echo empty($list->mobile) ? "" : substr_replace($list->mobile,"***",3,4)?></label>                                        </td>                                        <td style="vertical-align: middle; text-align: center">                                            <switch name="list.state">                                                <case value="1">正常</case>                                                <default />禁用                                            </switch>                                        </td>                                        <td>                                            <a class="btn <if condition='$list.state eq 1'>btn-danger<else />btn-success</if> " href="javascript:void(0)" onclick="onShow({$list.id},{$list.state})" style="margin-right: 3px;"><i class="halflings-icon white <if condition='$list.state eq 1'>remove<else />ok</if>"></i><if condition="$list.state eq 0">正常<else />禁用</if></a>                                            <a class="btn btn-info" style="margin-right: 3px;" href="javascript:void(0)" onclick="editUser('{$list.id}')"><i class="halflings-icon white zoom-in"></i>查看</a>                                                <!--<a class="btn btn-danger active" href="javascript:void(0)" onclick="delUser('{$list.id}')" style="margin-right: 3px;"><i class="halflings-icon white remove"></i>删除</a>-->                                        </td>                                    </tr>                                </foreach>                                </tbody>                            </table>                        </div>                    </div>                    {$page}                </div>            </div>        </div>    </div>    <!-- 用户编辑 -->    <div class="row-fluid sortable ui-sortable" id="user-edit">        <block name="edit"></block>    </div>    <script>        var p = {$p};        // 页面跳转        $(".pagination ul li a").click(function () {            var _p = $(this).data("p");            if(typeof(_p) !== "undefined"){                p = _p;                search(p);//                load();//                ajaxUrl("User/list/p/"+p);            }        });        // 电话        function mobi_show(obj,id){            var txt = obj.innerHTML;            if(txt.indexOf("*") == -1){                return false;            }            $.ajax({                type : 'post',                url : "{:url('User/mobi_show')}",                data : {id:id},                dataType : 'json',                success : function(ret){                    if(ret.ret == 1){                        obj.innerHTML=ret.msg;                    }else{                        layer.alert(ret.msg, {icon: 2,time:2000});                    }                }            })        }        // 删除功能//        function delUser(id){//            var length = $(".odd").length;//            layer.confirm('确认要删除吗？', {//                btn : [ '确定', '取消' ]//按钮//            }, function(index) {//                layer.close(index);//                load();//                $.ajax({//                    type : 'post',//                    url : "{:url('User/delUser')}",//                    data : {id:id},//                    dataType : 'json',//                    success : function(ret){//                        console.log(ret);//                        layer.closeAll();//                        if(ret.ret == -1){//                            layer.alert(ret.msg, {icon: 2,time:2000});//                        }else{//                            if(length == 1){//                                p = p*1-1;//                            }//                            load();//                            ajaxUrl("User/list/p/"+p);//                        }//                    }//                })//            });//        }        // 详情页面显示        function editUser(id) {            load();            $.ajax({                type: "POST",                url: "{:url('User/userdeta')}",                data: {id:id},                success: function (data) {                    layer.closeAll();                    if(data.ret == -1){                        layer.msg(data.msg,{icon:2,time:2000});                    }else{                        $("#user-edit").html('');                        $("#user-edit").append(data);                        $("#user-list").css('display','none');                        $("#user-edit").css("display","block");                    }                }            });        }        // 正常 禁用功能        function onShow(id,state) {            switch (state)            {                case 1:                    state = 0;                    break;                default:                    state = 1;            }            load();            $.ajax({                type : 'post',                url : "{:url('User/modifyUser')}",                data : {id:id,state:state},                dataType : 'json',                success : function(ret){                    layer.closeAll();                    if(ret.ret == -1){                        layer.alert(ret.msg, {icon: 2,time:2000});                    }else{                        load();                        ajaxUrl("User/list/p/"+p);                    }                }            })        }        //搜索用户        function search(b) {            p = b;            $.ajax({                type: "POST",                url: "/index.php/Admin/User/list/p/"+p,                data: $("#search").serialize(),                success: function (data) {                    layer.closeAll();                    if(data.ret == -1){                        layer.msg(data.msg,{icon:2,time:2000});                    }else {                        $(".content").html('');                        $(".content").append(data);                    }                }            });        }    </script></block>
